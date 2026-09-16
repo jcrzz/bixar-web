@@ -3,10 +3,14 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   ArrowUpRight,
+  Activity,
   Building2,
   Check,
   ChevronLeft,
   ChevronRight,
+  Cpu,
+  Calculator,
+  Layers3,
   Mail,
   MapPin,
   Menu,
@@ -72,6 +76,12 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return <p className="mb-5 font-mono text-xs uppercase tracking-[0.24em] text-[#09C895]">// {children}</p>
 }
 
+function SpecialtyIcon({ title }: { title: string }) {
+  const icons = { 'Cálculo estructural': Calculator, Instalaciones: Activity, 'Estudios técnicos': Layers3, BIM: Cpu }
+  const Icon = icons[title as keyof typeof icons] ?? Activity
+  return <Icon aria-hidden="true" className="specialty-icon" size={28} strokeWidth={1.5} />
+}
+
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [navVisible, setNavVisible] = useState(true)
@@ -100,6 +110,47 @@ export default function Page() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    const revealSections = Array.from(document.querySelectorAll<HTMLElement>('main > section:not(#inicio)'))
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (reduceMotion) {
+      revealSections.forEach((section) => section.classList.add('is-visible'))
+      return
+    }
+
+    document.documentElement.classList.add('reveal-ready')
+    revealSections.forEach((section) => {
+      section.style.opacity = '0'
+      section.style.transform = 'translateY(32px)'
+      Array.from(section.children).forEach((child) => {
+        const element = child as HTMLElement
+        element.style.opacity = '0'
+        element.style.transform = 'translateY(24px)'
+      })
+    })
+
+    const revealVisibleSections = () => {
+      revealSections.forEach((section) => {
+        const { top, bottom } = section.getBoundingClientRect()
+        if (top < window.innerHeight * 0.88 && bottom > 0) {
+          section.classList.add('is-visible')
+          section.style.opacity = '1'
+          section.style.transform = 'translateY(0)'
+          Array.from(section.children).forEach((child) => {
+            const element = child as HTMLElement
+            element.style.opacity = '1'
+            element.style.transform = 'translateY(0)'
+          })
+        }
+      })
+    }
+
+    revealVisibleSections()
+    window.addEventListener('scroll', revealVisibleSections, { passive: true })
+    return () => window.removeEventListener('scroll', revealVisibleSections)
+  }, [])
+
   const openProject = (index: number) => { setActiveProject(index); setActiveImage(0) }
   const project = activeProject === null ? null : projects[activeProject]
 
@@ -121,7 +172,7 @@ export default function Page() {
         <div className="relative mx-auto w-full max-w-7xl"><SectionLabel>Ingeniería que transforma</SectionLabel><h1 className="max-w-4xl text-balance text-5xl font-bold leading-[1.02] tracking-[-0.04em] sm:text-6xl lg:text-[5rem]">Proyectos integrales,<br /><span className="text-[#186DD4]">Resultados</span> de calidad.</h1><p className="mt-8 max-w-lg text-base leading-7 text-white/60">Desarrollamos soluciones de ingeniería aplicada, combinando precisión técnica, experiencia y tecnología.</p><div className="mt-10 flex flex-wrap gap-4"><a href="#contacto" className="button-primary">Iniciar proyecto <MoveUpRight size={16} /></a><a href="#nosotros" className="button-secondary">Conocé Bixar</a></div></div>
       </section>
 
-      <section id="ingenieria" className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40"><div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr] lg:items-end"><div><SectionLabel>Ingeniería</SectionLabel><h2 className="max-w-xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería basada en precisión y criterio técnico</h2></div><p className="max-w-xl text-lg leading-8 text-white/60">Gestionamos todo el proceso mediante herramientas BIM y seguimiento de obra para transformar el diseño en resultados concretos, minimizando errores y optimizando recursos.</p></div><div className="mt-16 overflow-hidden border border-white/10"><div className="h-72 bg-cover bg-center grayscale-[20%] transition duration-700 hover:scale-[1.02] lg:h-[500px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(32,32,32,.45), transparent), url('https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&w=2200&q=85')" }} /><div className="grid md:grid-cols-2">{specialties.map(([title, text], i) => <div key={title} className="border-t border-white/10 p-7 lg:p-9"><div className="mb-5 flex items-center justify-between"><h3 className="text-xl font-medium">{title}</h3><span className="font-mono text-xs text-[#09C895]">0{i + 1}</span></div><p className="max-w-md leading-7 text-white/55">{text}</p></div>)}</div></div></section>
+      <section id="ingenieria" className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40"><div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr] lg:items-end"><div><SectionLabel>Ingeniería</SectionLabel><h2 className="max-w-xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería basada en precisión y criterio técnico</h2></div><p className="max-w-xl text-lg leading-8 text-white/60">Gestionamos todo el proceso mediante herramientas BIM y seguimiento de obra para transformar el diseño en resultados concretos, minimizando errores y optimizando recursos.</p></div><div className="mt-16 overflow-hidden border border-white/10"><div className="h-72 bg-cover bg-center grayscale-[20%] transition duration-700 hover:scale-[1.02] lg:h-[500px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(32,32,32,.45), transparent), url('https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&w=2200&q=85')" }} /><div className="grid gap-px overflow-hidden border border-[#186DD4]/30 bg-[#186DD4]/30 md:grid-cols-2">{specialties.map(([title, text], i) => <div key={title} className="specialty-card group bg-[#202020] p-7 lg:p-9"><div className="mb-8 flex items-start justify-between"><SpecialtyIcon title={title} /><span className="font-mono text-xs text-[#09C895]">0{i + 1}</span></div><h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-[#09C895]">{title}</h3><p className="mt-3 max-w-md leading-7 text-white/55">{text}</p><span aria-hidden="true" className="specialty-card-line" /></div>)}</div></div></section>
 
       <section className="border-y border-white/10 bg-[#186DD4] px-6 py-16 lg:px-10"><div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-12 md:grid-cols-4">{[['+60','proyectos entregados'],['5','especialidades integradas'],['48h','respuesta técnica'],['3D','modelado BIM']].map(([value, label]) => <div key={label} className="border-l border-white/30 pl-5"><p className="text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">{value}</p><p className="mt-2 text-sm text-white/70">{label}</p></div>)}</div></section>
 

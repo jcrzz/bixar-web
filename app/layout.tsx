@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Bixar Ingeniería | Proyectos integrales, resultados de calidad',
+  title: 'Bixar Ingeniería',
   description: 'Soluciones de ingeniería aplicada, cálculo estructural, instalaciones y coordinación BIM.',
   generator: 'Bixar Ingeniería',
 }

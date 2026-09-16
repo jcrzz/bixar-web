@@ -18,6 +18,16 @@
 * { box-sizing: border-box; }
 html { background: #202020; scroll-behavior: smooth; }
 body { margin: 0; background: #202020; color: #f7f8f9; font-family: var(--font-sans); }
+main > section:not(#inicio) { opacity: 1; transform: translateY(0); transition: opacity .8s ease, transform .8s cubic-bezier(.22, 1, .36, 1); }
+main > section:not(#inicio) > * { opacity: 1; transform: translateY(0); transition: opacity .8s ease, transform .8s cubic-bezier(.22, 1, .36, 1); }
+.reveal-ready main > section:not(#inicio):not(.is-visible) { opacity: 0; transform: translateY(32px); }
+.reveal-ready main > section.is-visible { opacity: 1; transform: translateY(0); }
+.reveal-ready main > section:not(#inicio):not(.is-visible) > * { opacity: 0; transform: translateY(24px); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready main > section:not(#inicio):not(.is-visible),
+  .reveal-ready main > section:not(#inicio):not(.is-visible) > * { opacity: 1; transform: none; }
+  .reveal-ready main > section:not(#inicio) > * { transition: none; }
+}
 .logo-font { font-family: var(--font-sans); }
 ::selection { background: #09c895; color: #202020; }
 :focus-visible { outline: 2px solid #09c895; outline-offset: 4px; }
@@ -29,6 +39,12 @@ body { margin: 0; background: #202020; color: #f7f8f9; font-family: var(--font-s
 .button-primary:hover { background: #56e4bc; transform: translateY(-2px); }
 .button-secondary { display: inline-flex; align-items: center; border: 1px solid rgba(255,255,255,.3); color: #fff; padding: .9rem 1.25rem; font-size: .875rem; transition: border-color .2s, background .2s; }
 .button-secondary:hover { border-color: #09c895; background: rgba(9,200,149,.08); }
+.specialty-card { position: relative; min-height: 250px; transition: background-color .35s ease, transform .35s ease; }
+.specialty-card:hover { background-color: #242a31; transform: translateY(-3px); z-index: 1; }
+.specialty-icon { color: #09c895; transition: color .35s ease, transform .35s ease; }
+.specialty-card:hover .specialty-icon { color: #35a5ff; transform: translateY(-4px) scale(1.08); }
+.specialty-card-line { position: absolute; inset: auto 0 0; height: 1px; background: #186dd4; opacity: 0; transform: scaleX(.35); transform-origin: left; transition: opacity .35s ease, transform .35s ease; }
+.specialty-card:hover .specialty-card-line { opacity: 1; transform: scaleX(1); }
 .form-label { display: block; color: rgba(255,255,255,.55); font-family: var(--font-sans); font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; }
 .form-input { display: block; width: 100%; margin-top: .8rem; border: 0; border-bottom: 1px solid rgba(255,255,255,.25); background: transparent; padding: .8rem 0; color: #fff; font-family: var(--font-sans); font-size: 1.1rem; outline: none; transition: border-color .2s; }
 .form-input:focus { border-color: #09c895; }
