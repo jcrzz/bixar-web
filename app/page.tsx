@@ -82,6 +82,14 @@ function SpecialtyIcon({ title }: { title: string }) {
   return <Icon aria-hidden="true" className="specialty-icon" size={28} strokeWidth={1.5} />
 }
 
+function SocialIcon({ network }: { network: 'linkedin' | 'instagram' | 'facebook' }) {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" className="h-[18px] w-[18px]">
+    {network === 'linkedin' && <><path d="M6 9v9" /><path d="M6 6.2v.1" /><path d="M10.5 18v-5a3 3 0 0 1 6 0v5" /><path d="M10.5 10v8" /></>}
+    {network === 'instagram' && <><rect x="4.5" y="4.5" width="15" height="15" rx="4" /><circle cx="12" cy="12" r="3.5" /><path d="M17.3 6.8h.01" /></>}
+    {network === 'facebook' && <path d="M14.5 18v-6h2l.5-2h-2.5V8.8c0-.8.3-1.3 1.3-1.3H16V5.7c-.5-.1-1-.2-1.8-.2-1.8 0-3 1.1-3 3.1V10H9v2h2.2v6" />}
+  </svg>
+}
+
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [navVisible, setNavVisible] = useState(true)
@@ -184,7 +192,33 @@ export default function Page() {
 
       <section id="contacto" className="border-t border-white/10 px-6 py-28 lg:px-10 lg:py-40"><div className="mx-auto grid max-w-7xl gap-20 lg:grid-cols-[.8fr_1.2fr]"><div><SectionLabel>Contacto</SectionLabel><h2 className="text-5xl font-semibold leading-tight tracking-[-0.05em] sm:text-7xl">Evaluemos<br /><span className="text-[#186DD4]">tu proyecto.</span></h2><div className="mt-20 space-y-6 text-sm text-white/55"><div className="flex gap-3"><MapPin className="shrink-0 text-[#09C895]" size={18} /><span>Sarmiento 1564<br />Concepción del Uruguay, E.R.</span></div><a href="mailto:hola@bixar.com.ar" className="flex gap-3 hover:text-white"><Mail className="text-[#09C895]" size={18} />hola@bixar.com.ar</a><div className="flex gap-5 pt-5 font-mono text-xs uppercase tracking-widest"><a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="hover:text-[#09C895]">LinkedIn</a><a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#09C895]">Instagram</a><a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="hover:text-[#09C895]">Facebook</a></div></div></div><form onSubmit={(event) => { event.preventDefault(); setSent(true) }} className="space-y-8"><label className="form-label">Nombre y apellido<input required className="form-input" /></label><label className="form-label">Email<input required type="email" className="form-input" /></label><label className="form-label">Mensaje<textarea required rows={5} className="form-input resize-none" /></label><button className="button-primary" type="submit">{sent ? 'Mensaje enviado' : 'Evaluar proyecto'} <ArrowUpRight size={16} /></button>{sent && <p className="flex items-center gap-2 text-sm text-[#09C895]"><Check size={16} /> Gracias, nos pondremos en contacto.</p>}</form></div></section>
 
-      <footer className="border-t border-white/10 px-6 py-8 lg:px-10"><div className="mx-auto max-w-7xl"><Logo /></div></footer>
+      <footer className="border-t border-white/10 bg-[#171717] px-6 pt-16 lg:px-10 lg:pt-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-12 pb-16 md:grid-cols-[1.3fr_.7fr] lg:gap-24">
+            <div>
+              <Logo />
+              <p className="mt-7 max-w-md text-sm leading-6 text-white/55">Integramos Ingeniería, Arquitectura y Construcción bajo una sola firma. Soluciones técnicas y creativas, ejecutadas con precisión.</p>
+              <div className="mt-7 flex gap-3">
+                <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-10 w-10 items-center justify-center bg-white/[.07] text-white/65 transition hover:bg-[#09C895] hover:text-[#171717]"><SocialIcon network="linkedin" /></a>
+                <a href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="flex h-10 w-10 items-center justify-center bg-white/[.07] text-white/65 transition hover:bg-[#09C895] hover:text-[#171717]"><SocialIcon network="instagram" /></a>
+                <a href="https://www.facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="flex h-10 w-10 items-center justify-center bg-white/[.07] text-white/65 transition hover:bg-[#09C895] hover:text-[#171717]"><SocialIcon network="facebook" /></a>
+              </div>
+            </div>
+            <div>
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-[.2em] text-[#09C895]">Contacto</h2>
+              <div className="mt-7 space-y-5 text-sm text-white/60">
+                <a href="mailto:contacto@bixar.com" className="flex items-center gap-3 transition hover:text-white"><Mail size={17} /> contacto@bixar.com</a>
+                <a href="tel:+541100000000" className="flex items-center gap-3 transition hover:text-white"><MoveUpRight size={17} /> +54 11 0000 0000</a>
+                <p className="flex items-center gap-3"><MapPin size={17} /> Buenos Aires, AR</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 border-t border-white/10 py-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
+            <p>© 2026 Bixar. Todos los derechos reservados.</p>
+            <p>Ingeniería · Arquitectura · Construcción</p>
+          </div>
+        </div>
+      </footer>
 
       {project && <div role="dialog" aria-modal="true" aria-label={project.name} className="fixed inset-0 z-50 flex items-center justify-center bg-[#202020]/95 p-5 backdrop-blur-md" onClick={() => setActiveProject(null)}><div className="relative w-full max-w-5xl" onClick={(event) => event.stopPropagation()}><button onClick={() => setActiveProject(null)} aria-label="Cerrar galería" className="absolute -right-1 -top-14 text-white/70 hover:text-white"><X /></button><div className="relative aspect-video overflow-hidden"><img src={project.images[activeImage]} alt={`${project.name}, imagen ${activeImage + 1}`} className="h-full w-full object-cover" /><button aria-label="Foto anterior" onClick={() => setActiveImage((activeImage - 1 + project.images.length) % project.images.length)} className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#202020]/70"><ChevronLeft /></button><button aria-label="Foto siguiente" onClick={() => setActiveImage((activeImage + 1) % project.images.length)} className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#202020]/70"><ChevronRight /></button></div><div className="flex items-center justify-between pt-5"><div><p className="font-mono text-xs uppercase tracking-widest text-[#09C895]">{project.category}</p><h3 className="mt-2 text-2xl">{project.name}</h3></div><span className="font-mono text-sm text-white/50">{String(activeImage + 1).padStart(2, '0')} / {String(project.images.length).padStart(2, '0')}</span></div><div className="mt-5 flex gap-3">{project.images.map((image, index) => <button key={image} onClick={() => setActiveImage(index)} className={`h-16 w-24 overflow-hidden border-2 ${index === activeImage ? 'border-[#09C895]' : 'border-transparent opacity-50'}`}><img src={image} alt="" className="h-full w-full object-cover" /></button>)}</div></div></div>}
     </main>
