@@ -25,6 +25,7 @@ const projects = [
   {
     name: 'Complejo Río Uruguay',
     category: 'Cálculo estructural · BIM',
+    description: 'El Complejo Río Uruguay reúne viviendas, espacios comunes y áreas de circulación en una propuesta residencial que necesitó una mirada integral desde las primeras decisiones. El trabajo comenzó con el análisis de la documentación disponible, la revisión de las condiciones del terreno y la definición de un sistema estructural claro, eficiente y compatible con la arquitectura. A partir de esa base se estudiaron luces, apoyos, cargas y encuentros para anticipar dificultades antes de llegar a la obra. La coordinación temprana permitió ordenar la información y reducir ajustes durante las distintas etapas del proyecto. El modelo BIM se utilizó como una herramienta de trabajo compartida, capaz de reunir geometría, criterios técnicos y documentación en un mismo entorno. Esto facilitó la comunicación entre disciplinas y ayudó a detectar interferencias entre estructura, instalaciones y terminaciones. También permitió revisar alternativas, comparar soluciones y tomar decisiones con mayor información. El resultado es una propuesta más ordenada, con detalles constructivos coherentes y una base técnica preparada para acompañar el crecimiento del proyecto. La documentación fue pensada para ser útil tanto en la instancia de diseño como durante la ejecución, ofreciendo referencias claras para los equipos involucrados. Cada definición buscó equilibrar seguridad, economía de recursos, facilidad constructiva y mantenimiento a largo plazo. Más que resolver únicamente el cálculo, el proyecto trabajó sobre la relación entre las distintas partes de la obra. Esa forma de coordinar permite que la ingeniería tenga un impacto concreto en la calidad final, en los tiempos de ejecución y en la previsibilidad de las decisiones. La experiencia también dejó una metodología replicable para futuros conjuntos residenciales con necesidades similares.',
     cover: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1400&q=85',
     images: [
       'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1800&q=85',
@@ -35,6 +36,7 @@ const projects = [
   {
     name: 'Centro Logístico Norte',
     category: 'Instalaciones · Coordinación',
+    description: 'El Centro Logístico Norte fue planteado para sostener una operación intensa, con circulación constante de vehículos, áreas de carga y descarga, depósitos y espacios de apoyo. En este contexto, la coordinación de instalaciones ocupa un lugar central porque cada recorrido técnico debe convivir con la estructura, la arquitectura y las necesidades operativas del edificio. El proyecto comenzó con el relevamiento de los requerimientos generales y la organización de las zonas que intervienen en el funcionamiento diario. Luego se estudiaron trazados, alturas, cruces y puntos de acceso para que las redes pudieran instalarse de manera ordenada y mantenerse disponibles para futuras revisiones. La documentación buscó hacer visibles las decisiones importantes y ofrecer una lectura sencilla para los equipos de obra. El modelo coordinado permitió revisar interferencias antes de la ejecución, evitando que los conflictos aparecieran recién durante el montaje. También ayudó a comparar alternativas de recorrido y a encontrar soluciones que redujeran pérdidas de material, tiempos de instalación y trabajos correctivos. Cada disciplina fue evaluada en relación con las demás, con especial atención a los sectores de mayor demanda y a las áreas donde una interrupción podría afectar la operación. El resultado es una base técnica que acompaña el funcionamiento del centro sin perder flexibilidad para adaptarse a cambios. La propuesta prioriza accesibilidad, claridad y capacidad de mantenimiento, tres condiciones importantes para una infraestructura que debe permanecer activa. Además, la información organizada facilita la comunicación entre proyectistas, proveedores y responsables de obra. La experiencia demuestra que una coordinación precisa no solo evita problemas constructivos: también mejora la previsibilidad, protege la inversión y permite que el edificio responda mejor a las exigencias de su actividad cotidiana.',
     cover: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1400&q=85',
     images: [
       'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1800&q=85',
@@ -45,6 +47,7 @@ const projects = [
   {
     name: 'Casa Patio Sur',
     category: 'Estructuras · Modelado 3D',
+    description: 'Casa Patio Sur es una propuesta residencial organizada alrededor de la relación entre interior, exterior y luz natural. El proyecto necesitó integrar decisiones arquitectónicas, estructurales y constructivas desde el inicio para que los espacios pudieran desarrollarse con continuidad y sin perder claridad. El modelado tridimensional permitió estudiar proporciones, alturas, apoyos y encuentros antes de definir la documentación final. Gracias a esa revisión se pudieron comparar alternativas para resolver las áreas principales, las circulaciones y los puntos de contacto entre distintos materiales. La estructura se pensó como parte de una solución general, evitando decisiones aisladas que luego generaran modificaciones innecesarias. El modelo también sirvió para revisar el comportamiento visual de los elementos, la ubicación de instalaciones y la forma en que cada componente participa en la experiencia cotidiana de la vivienda. La información quedó organizada para acompañar tanto la etapa de proyecto como la posterior ejecución en obra. Se prestó especial atención a los detalles que suelen concentrar dudas, como cambios de nivel, encuentros de cubierta, aberturas, escaleras y transiciones entre superficies. La coordinación permitió detectar incompatibilidades con anticipación y mejorar la comunicación entre quienes diseñan y quienes construyen. El resultado busca ser preciso sin volverse rígido, dejando espacio para resolver particularidades propias del sitio y de los materiales elegidos. Cada decisión responde a una intención concreta: aprovechar mejor los recursos, simplificar la ejecución y construir una vivienda durable, cómoda y coherente. El uso del modelo 3D aporta además una lectura accesible para presentar el proyecto, revisar avances y conversar sobre cambios con mayor claridad. Casa Patio Sur representa una manera de trabajar donde la tecnología no reemplaza el criterio profesional, sino que lo vuelve más visible, coordinado y útil para tomar mejores decisiones.',
     cover: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85',
     images: [
       'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
@@ -52,7 +55,68 @@ const projects = [
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85',
     ],
   },
+  {
+    name: 'Torre Costanera',
+    category: 'Estructuras · Dirección técnica',
+    description: 'Propuesta de estructura y coordinación para una torre residencial ubicada en un entorno urbano consolidado, con especial atención a la eficiencia constructiva, la circulación y la integración con el paisaje de la costa.',
+    cover: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85',
+    ],
+  },
+  {
+    name: 'Planta Industrial Este',
+    category: 'Ingeniería industrial · BIM',
+    description: 'Diseño coordinado para una planta industrial flexible, pensado para ordenar etapas, mejorar recorridos y facilitar futuras ampliaciones sin perder precisión en la documentación.',
+    cover: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1400&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&w=1800&q=85',
+    ],
+  },
+  {
+    name: 'Casa del Parque',
+    category: 'Arquitectura · Estructuras',
+    description: 'Vivienda unifamiliar proyectada para aprovechar el vínculo con el entorno verde, combinando una estructura clara, espacios luminosos y decisiones constructivas simples de mantener.',
+    cover: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85',
+    ],
+  },
+  {
+    name: 'Nave Industrial Sur',
+    category: 'Cálculo estructural · Obra',
+    description: 'Resolución técnica de una nave de gran escala con foco en luces, montaje, durabilidad y coordinación entre la estructura principal y las instalaciones de servicio.',
+    cover: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1800&q=85',
+    ],
+  },
+  {
+    name: 'Oficinas Parque Norte',
+    category: 'Instalaciones · Coordinación',
+    description: 'Coordinación de instalaciones para un conjunto de oficinas contemporáneo, con soluciones que priorizan el confort, la flexibilidad de uso y el mantenimiento eficiente.',
+    cover: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=85',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1800&q=85',
+    ],
+  },
 ]
+
+const projectDescriptionExtension = 'Esta descripción funciona como contenido de muestra para presentar el alcance del trabajo y puede reemplazarse más adelante por información definitiva del cliente. La intención es comunicar proceso, criterio y resultado de una manera clara, cercana y útil para quienes necesitan evaluar una nueva propuesta de ingeniería.'
+
+projects.forEach((project) => {
+  project.description += ` ${projectDescriptionExtension}`
+})
 
 const specialties = [
   ['Cálculo estructural', 'Hormigón armado, acero y madera. Modelado 3D. Diseño bajo normativa vigente.'],
@@ -95,6 +159,8 @@ export default function Page() {
   const [navVisible, setNavVisible] = useState(true)
   const [activeProject, setActiveProject] = useState<number | null>(null)
   const [activeImage, setActiveImage] = useState(0)
+  const [mobileImage, setMobileImage] = useState<string | null>(null)
+  const [projectSlide, setProjectSlide] = useState(0)
   const [sent, setSent] = useState(false)
   const lastScrollY = useRef(0)
 
@@ -159,7 +225,27 @@ export default function Page() {
     return () => window.removeEventListener('scroll', revealVisibleSections)
   }, [])
 
+  useEffect(() => {
+    const handleThumbnailClick = (event: MouseEvent) => {
+      if (!window.matchMedia('(max-width: 767px)').matches) return
+
+      const target = event.target as HTMLElement
+      const thumbnail = target.closest('[role="dialog"] > div > div.mt-5.flex button')
+      const image = thumbnail?.querySelector('img')
+
+      if (image) setMobileImage(image.currentSrc || image.src)
+    }
+
+    document.addEventListener('click', handleThumbnailClick)
+    return () => document.removeEventListener('click', handleThumbnailClick)
+  }, [])
+
   const openProject = (index: number) => { setActiveProject(index); setActiveImage(0) }
+  const moveProjectSlide = (direction: number) => {
+    const isMobile = window.matchMedia('(max-width: 767px)').matches
+    const maxSlide = isMobile ? projects.length - 1 : projects.length - 3
+    setProjectSlide((current) => Math.max(0, Math.min(current + direction, maxSlide)))
+  }
   const project = activeProject === null ? null : projects[activeProject]
 
   return (
@@ -182,7 +268,7 @@ export default function Page() {
 
       <section id="ingenieria" className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40"><div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr] lg:items-end"><div><SectionLabel>Ingeniería</SectionLabel><h2 className="max-w-xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería basada en precisión y criterio técnico</h2></div><p className="max-w-xl text-lg leading-8 text-white/60">Gestionamos todo el proceso mediante herramientas BIM y seguimiento de obra para transformar el diseño en resultados concretos, minimizando errores y optimizando recursos.</p></div><div className="mt-16 overflow-hidden border border-white/10"><div className="h-72 bg-cover bg-center grayscale-[20%] transition duration-700 hover:scale-[1.02] lg:h-[500px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(32,32,32,.45), transparent), url('https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&w=2200&q=85')" }} /><div className="grid gap-px overflow-hidden border border-[#186DD4]/30 bg-[#186DD4]/30 md:grid-cols-2">{specialties.map(([title, text], i) => <div key={title} className="specialty-card group bg-[#202020] p-7 lg:p-9"><div className="mb-8 flex items-start justify-between"><SpecialtyIcon title={title} /><span className="font-mono text-xs text-[#09C895]">0{i + 1}</span></div><h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-[#09C895]">{title}</h3><p className="mt-3 max-w-md leading-7 text-white/55">{text}</p><span aria-hidden="true" className="specialty-card-line" /></div>)}</div></div></section>
 
-      <section id="proyectos" className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40"><div className="flex flex-col justify-between gap-8 md:flex-row md:items-end"><div><SectionLabel>Proyectos destacados</SectionLabel><h2 className="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">Trabajos que hablan<br /><span className="text-[#09C895]">por nosotros.</span></h2></div><p className="max-w-xs text-sm leading-6 text-white/50">Explorá una selección de proyectos donde la ingeniería se convierte en obra.</p></div><div className="mt-16 grid gap-5 md:grid-cols-3">{projects.map((item, index) => <button key={item.name} onClick={() => openProject(index)} className="group text-left"><div className="relative aspect-[4/5] overflow-hidden bg-[#2a2a2a]"><img src={item.cover} alt={item.name} className="h-full w-full object-cover grayscale-[15%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" /><div className="absolute inset-0 bg-gradient-to-t from-[#202020] via-transparent to-transparent opacity-80" /><span className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-[#202020]/30 transition group-hover:bg-[#09C895] group-hover:text-[#202020]"><ArrowUpRight size={18} /></span><div className="absolute bottom-6 left-6"><p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-[#09C895]">{item.category}</p><h3 className="text-xl font-medium">{item.name}</h3></div></div></button>)}</div></section>
+      <section id="proyectos" className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40"><div className="flex flex-col justify-between gap-8 md:flex-row md:items-end"><div><SectionLabel>Proyectos destacados</SectionLabel><h2 className="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">Trabajos que hablan<br /><span className="text-[#09C895]">por nosotros.</span></h2></div><p className="max-w-xs text-sm leading-6 text-white/50">Explorá una selección de proyectos donde la ingeniería se convierte en obra.</p></div><div className="project-carousel mt-16"><div className="project-carousel-viewport"><div className="project-carousel-track" style={{ '--project-slide': projectSlide } as React.CSSProperties}>{projects.map((item, index) => <button key={item.name} onClick={() => openProject(index)} className="project-carousel-card group text-left"><div className="relative aspect-[4/5] overflow-hidden bg-[#2a2a2a]"><img src={item.cover} alt={item.name} className="h-full w-full object-cover grayscale-[15%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" /><div className="absolute inset-0 bg-gradient-to-t from-[#202020] via-transparent to-transparent opacity-80" /><span className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-[#202020]/30 transition group-hover:bg-[#09C895] group-hover:text-[#202020]"><ArrowUpRight size={18} /></span><div className="absolute bottom-6 left-6"><p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-[#09C895]">{item.category}</p><h3 className="text-xl font-medium">{item.name}</h3></div></div></button>)}</div></div><div className="mt-8 flex items-center justify-center gap-6"><button type="button" aria-label="Proyecto anterior" onClick={() => moveProjectSlide(-1)} className="carousel-arrow"><ChevronLeft size={18} /></button><div className="hidden items-center gap-2 md:flex">{Array.from({ length: projects.length - 2 }, (_, index) => <button type="button" key={index} aria-label={`Ir al grupo ${index + 1}`} onClick={() => setProjectSlide(index)} className={`carousel-dot ${projectSlide === index ? 'is-active' : ''}`} />)}</div><div className="flex items-center gap-2 md:hidden">{projects.map((item, index) => <button type="button" key={item.name} aria-label={`Ir a ${item.name}`} onClick={() => setProjectSlide(index)} className={`carousel-dot ${projectSlide === index ? 'is-active' : ''}`} />)}</div><button type="button" aria-label="Siguiente proyecto" onClick={() => moveProjectSlide(1)} className="carousel-arrow"><ChevronRight size={18} /></button></div></div></section>
       <section id="nosotros" className="border-t border-white/10 bg-[#1b1b1b] px-6 py-28 lg:px-10 lg:py-40"><div className="mx-auto max-w-7xl"><div className="grid gap-16 lg:grid-cols-[1fr_.8fr]"><div><SectionLabel>Nosotros</SectionLabel><h2 className="max-w-2xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería aplicada.<br /><span className="text-[#186DD4]">Soluciones eficientes.</span></h2></div><p className="max-w-xl self-end text-lg leading-8 text-white/60">En Bixar desarrollamos soluciones de ingeniería pensadas para llevarse a obra. Integramos cálculo, instalaciones, estudios técnicos y modelado BIM para resolver cada proyecto con precisión, coordinación y criterio constructivo.</p></div><div className="mt-20 border-t border-white/10"><p className="py-8 font-mono text-xs uppercase tracking-[0.24em] text-white/50">La base de nuestros proyectos</p><div className="grid border-b border-white/10 md:grid-cols-2">{pillars.map(([title, text, Icon]) => <div key={title as string} className="border-t border-white/10 p-7 lg:p-10"><Icon className="mb-10 text-[#09C895]" size={22} /><h3 className="text-2xl font-medium">{title as string}</h3><p className="mt-3 max-w-xs leading-7 text-white/50">{text as string}</p></div>)}</div></div></div></section>
 
       <section className="relative overflow-hidden bg-[#1F2832] px-6 py-28 lg:px-10 lg:py-40"><div className="relative mx-auto max-w-7xl"><SectionLabel>Una forma distinta de hacer</SectionLabel><h2 className="max-w-5xl text-4xl font-semibold leading-[1.06] tracking-[-0.05em] sm:text-6xl lg:text-8xl">Nuestra ventaja competitiva es la <span className="text-[#09C895]">ingeniería coordinada.</span></h2><div className="mt-12 flex max-w-2xl gap-5 border-l border-[#09C895] pl-6"><Zap className="mt-1 shrink-0 text-[#09C895]" size={22} /><p className="text-lg leading-8 text-white/60">Integramos cálculo estructural, diseño de instalaciones y modelado BIM para desarrollar proyectos más precisos, detectar interferencias antes de la obra y optimizar cada etapa del proceso.</p></div></div></section>
@@ -217,7 +303,8 @@ export default function Page() {
         </div>
       </footer>
 
-      {project && <div role="dialog" aria-modal="true" aria-label={project.name} className="fixed inset-0 z-50 flex items-center justify-center bg-[#202020]/95 p-5 backdrop-blur-md" onClick={() => setActiveProject(null)}><div className="relative w-full max-w-5xl" onClick={(event) => event.stopPropagation()}><button onClick={() => setActiveProject(null)} aria-label="Cerrar galería" className="absolute -right-1 -top-14 text-white/70 hover:text-white"><X /></button><div className="relative aspect-video overflow-hidden"><img src={project.images[activeImage]} alt={`${project.name}, imagen ${activeImage + 1}`} className="h-full w-full object-cover" /><button aria-label="Foto anterior" onClick={() => setActiveImage((activeImage - 1 + project.images.length) % project.images.length)} className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#202020]/70"><ChevronLeft /></button><button aria-label="Foto siguiente" onClick={() => setActiveImage((activeImage + 1) % project.images.length)} className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#202020]/70"><ChevronRight /></button></div><div className="flex items-center justify-between pt-5"><div><p className="font-mono text-xs uppercase tracking-widest text-[#09C895]">{project.category}</p><h3 className="mt-2 text-2xl">{project.name}</h3></div><span className="font-mono text-sm text-white/50">{String(activeImage + 1).padStart(2, '0')} / {String(project.images.length).padStart(2, '0')}</span></div><div className="mt-5 flex gap-3">{project.images.map((image, index) => <button key={image} onClick={() => setActiveImage(index)} className={`h-16 w-24 overflow-hidden border-2 ${index === activeImage ? 'border-[#09C895]' : 'border-transparent opacity-50'}`}><img src={image} alt="" className="h-full w-full object-cover" /></button>)}</div></div></div>}
+      {project && <div role="dialog" aria-modal="true" aria-label={project.name} className="fixed inset-0 z-50 flex items-center justify-center bg-[#202020]/95 p-5 backdrop-blur-md" onClick={() => setActiveProject(null)}><div className="relative w-full max-w-5xl" onClick={(event) => event.stopPropagation()}><button onClick={() => setActiveProject(null)} aria-label="Cerrar galería" className="absolute -right-1 -top-14 text-white/70 hover:text-white"><X /></button><div className="relative aspect-video overflow-hidden"><img src={project.images[activeImage]} alt={`${project.name}, imagen ${activeImage + 1}`} className="h-full w-full object-cover" /><button aria-label="Foto anterior" onClick={() => setActiveImage((activeImage - 1 + project.images.length) % project.images.length)} className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#202020]/70"><ChevronLeft /></button><button aria-label="Foto siguiente" onClick={() => setActiveImage((activeImage + 1) % project.images.length)} className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#202020]/70"><ChevronRight /></button></div><p className="mt-5 max-w-3xl text-sm leading-7 text-white/60">{project.description}</p><div className="flex items-center justify-between pt-5"><div><p className="font-mono text-xs uppercase tracking-widest text-[#09C895]">{project.category}</p><h3 className="mt-2 text-2xl">{project.name}</h3></div><span className="font-mono text-sm text-white/50">{String(activeImage + 1).padStart(2, '0')} / {String(project.images.length).padStart(2, '0')}</span></div><div className="mt-5 flex gap-3">{project.images.map((image, index) => <button key={image} onClick={() => setActiveImage(index)} className={`h-16 w-24 overflow-hidden border-2 ${index === activeImage ? 'border-[#09C895]' : 'border-transparent opacity-50'}`}><img src={image} alt="" className="h-full w-full object-cover" /></button>)}</div></div></div>}
+      {mobileImage && <div role="dialog" aria-label="Imagen ampliada" className="mobile-image-viewer fixed inset-0 z-[60] flex items-center justify-center bg-[#202020]/95 p-4" onClick={() => setMobileImage(null)}><button aria-label="Cerrar imagen ampliada" className="absolute right-5 top-5 text-3xl text-white/80">&times;</button><img src={mobileImage} alt="Imagen ampliada del proyecto" className="max-h-full max-w-full object-contain" /></div>}
     </main>
   )
 }
