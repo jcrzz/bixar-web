@@ -126,10 +126,10 @@ const specialties = [
 ]
 
 const specialtyImages = [
-  'https://images.unsplash.com/photo-1503387762-592dea58ef25?auto=format&fit=crop&w=2200&q=85',
-  'https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&w=2200&q=85',
-  'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=2200&q=85',
-  'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=2200&q=85',
+  '/ingenieria/1.Calculo estructural.png',
+  '/ingenieria/2.Instalaciones.png',
+  '/ingenieria/3. Estudios técnicos.png',
+  '/ingenieria/4.BIM.png',
 ]
 
 const pillars = [
