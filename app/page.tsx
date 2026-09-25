@@ -172,6 +172,8 @@ export default function Page() {
   const [activeSpecialty, setActiveSpecialty] = useState(0)
   const [sent, setSent] = useState(false)
   const lastScrollY = useRef(0)
+  const projectTrackRef = useRef<HTMLDivElement | null>(null)
+  const [projectCardWidth, setProjectCardWidth] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -264,12 +266,40 @@ export default function Page() {
   const moveSpecialty = (direction: number) => {
     setActiveSpecialty((current) => (current + direction + specialties.length) % specialties.length)
   }
+  const maxProjectSlide = Math.max(0, projects.length - 3)
+  const projectSlideDots = Array.from({ length: maxProjectSlide + 1 }, (_, index) => index)
+
+  useEffect(() => {
+    const updateProjectCardWidth = () => {
+      if (!projectTrackRef.current) return
+
+      const firstCard = projectTrackRef.current.querySelector('.project-carousel-card') as HTMLElement | null
+      if (!firstCard) return
+
+      const trackStyles = window.getComputedStyle(projectTrackRef.current)
+      const gap = Number.parseFloat(trackStyles.columnGap || trackStyles.gap || '0') || 0
+      setProjectCardWidth(firstCard.getBoundingClientRect().width + gap)
+    }
+
+    updateProjectCardWidth()
+
+    const resizeObserver = new ResizeObserver(updateProjectCardWidth)
+    if (projectTrackRef.current) resizeObserver.observe(projectTrackRef.current)
+
+    window.addEventListener('resize', updateProjectCardWidth)
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', updateProjectCardWidth)
+    }
+  }, [])
+
   const moveProjectSlide = (direction: number) => {
     const isMobile = window.matchMedia('(max-width: 767px)').matches
-    const maxSlide = isMobile ? projects.length - 1 : projects.length - 3
+    const maxSlide = isMobile ? projects.length - 1 : maxProjectSlide
     setProjectSlide((current) => Math.max(0, Math.min(current + direction, maxSlide)))
   }
   const project = activeProject === null ? null : projects[activeProject]
+  const projectTrackTransform = projectCardWidth > 0 ? `translateX(-${projectSlide * projectCardWidth}px)` : undefined
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#202020] text-white">
@@ -289,18 +319,60 @@ export default function Page() {
         <div className="relative mx-auto w-full max-w-7xl"><SectionLabel>Ingeniería que transforma</SectionLabel><h1 className="max-w-4xl text-balance text-5xl font-bold leading-[1.02] tracking-[-0.04em] sm:text-6xl lg:text-[5rem]">Proyectos integrales,<br /><span className="text-[#186DD4]">resultados</span> de calidad.</h1><p className="mt-8 max-w-lg text-base leading-7 text-white/60">Desarrollamos soluciones de ingeniería aplicada, combinando precisión técnica, experiencia y tecnología.</p><div className="mt-10 flex flex-wrap gap-4"><a href="#contacto" className="button-primary">Iniciar proyecto <MoveUpRight size={16} /></a><a href="#nosotros" className="button-secondary">Conocé Bixar</a></div></div>
       </section>
 
-      <section id="ingenieria" className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40">
-        <div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr] lg:items-end"><div><SectionLabel>Ingeniería</SectionLabel><h2 className="max-w-xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería basada en <span className="text-[#186DD4]">precisión y criterio técnico</span></h2></div><p className="max-w-xl justify-self-end text-lg leading-8 text-white/60 lg:text-right">Gestionamos todo el proceso mediante herramientas BIM y seguimiento de obra para transformar el diseño en resultados concretos, minimizando errores y optimizando recursos.</p></div>
-        <div className="mt-16 overflow-hidden border border-white/10">
-          <div className="specialty-carousel-viewport"><div className="specialty-carousel-track" style={{ '--specialty-slide': activeSpecialty } as React.CSSProperties}>{specialtyImages.map((image, index) => <div key={image} className="specialty-carousel-slide"><img src={image} alt={`${specialties[index][0]} en acción`} /></div>)}</div><button type="button" aria-label="Especialidad anterior" onClick={() => moveSpecialty(-1)} className="specialty-carousel-arrow specialty-carousel-arrow-left"><ChevronLeft size={20} /></button><button type="button" aria-label="Siguiente especialidad" onClick={() => moveSpecialty(1)} className="specialty-carousel-arrow specialty-carousel-arrow-right"><ChevronRight size={20} /></button></div>
-          <div className="grid gap-px overflow-hidden border border-[#186DD4]/30 bg-[#186DD4]/30 md:grid-cols-2">{specialties.map(([title, text], i) => <button type="button" key={title} onClick={() => setActiveSpecialty(i)} className={`specialty-card group bg-[#202020] p-7 text-left lg:p-9 ${activeSpecialty === i ? 'is-active' : ''}`}><div className="mb-8 flex items-start justify-between"><SpecialtyIcon title={title} /><span className="font-mono text-xs text-[#09C895]">0{i + 1}</span></div><h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-[#09C895]">{title}</h3><p className="mt-3 max-w-md leading-7 text-white/55">{text}</p><span aria-hidden="true" className="specialty-card-line" /></button>)}</div>
+      <section id="ingenieria" className="px-6 py-28 lg:px-10 lg:py-40">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr] lg:items-end"><div><SectionLabel>Ingeniería</SectionLabel><h2 className="max-w-xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería basada en <span className="text-[#186DD4]">precisión y criterio técnico</span></h2></div><p className="max-w-xl justify-self-end text-lg leading-8 text-white/60 lg:text-right">Gestionamos todo el proceso mediante herramientas BIM y seguimiento de obra para transformar el diseño en resultados concretos, minimizando errores y optimizando recursos.</p></div>
+          <div className="mt-16 overflow-hidden border border-white/10">
+            <div className="specialty-carousel-viewport"><div className="specialty-carousel-track" style={{ '--specialty-slide': activeSpecialty } as React.CSSProperties}>{specialtyImages.map((image, index) => <div key={image} className="specialty-carousel-slide"><img src={image} alt={`${specialties[index][0]} en acción`} /></div>)}</div><button type="button" aria-label="Especialidad anterior" onClick={() => moveSpecialty(-1)} className="specialty-carousel-arrow specialty-carousel-arrow-left"><ChevronLeft size={20} /></button><button type="button" aria-label="Siguiente especialidad" onClick={() => moveSpecialty(1)} className="specialty-carousel-arrow specialty-carousel-arrow-right"><ChevronRight size={20} /></button></div>
+            <div className="grid gap-px overflow-hidden border border-[#186DD4]/30 bg-[#186DD4]/30 md:grid-cols-2">{specialties.map(([title, text], i) => <button type="button" key={title} onClick={() => setActiveSpecialty(i)} className={`specialty-card group bg-[#202020] p-7 text-left lg:p-9 ${activeSpecialty === i ? 'is-active' : ''}`}><div className="mb-8 flex items-start justify-between"><SpecialtyIcon title={title} /><span className="font-mono text-xs text-[#09C895]">0{i + 1}</span></div><h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-[#09C895]">{title}</h3><p className="mt-3 max-w-md leading-7 text-white/55">{text}</p><span aria-hidden="true" className="specialty-card-line" /></button>)}</div>
+          </div>
         </div>
       </section>
 
-      <section id="proyectos" className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40"><div className="flex flex-col justify-between gap-8 md:flex-row md:items-end"><div><SectionLabel>Proyectos destacados</SectionLabel><h2 className="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">Trabajos que hablan<br /><span className="text-[#09C895]">por nosotros.</span></h2></div><p className="max-w-xs text-sm leading-6 text-white/50">Explorá una selección de proyectos donde la ingeniería se convierte en obra.</p></div><div className="project-carousel mt-16"><div className="project-carousel-viewport"><div className="project-carousel-track" style={{ '--project-slide': projectSlide } as React.CSSProperties}>{projects.map((item, index) => <button key={item.name} onClick={() => openProject(index)} className="project-carousel-card group text-left"><div className="relative aspect-[4/5] overflow-hidden bg-[#2a2a2a]"><img src={item.images[cardImages[item.name] ?? 0]} alt={item.name} className="h-full w-full object-cover grayscale-[15%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" /><span role="button" tabIndex={0} aria-label={`Imagen anterior de ${item.name}`} onClick={(event) => { event.stopPropagation(); moveCardImage(item.name, item.images.length, -1) }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); moveCardImage(item.name, item.images.length, -1) } }} className="project-image-arrow project-image-arrow-left"><ChevronLeft size={18} /></span><span role="button" tabIndex={0} aria-label={`Siguiente imagen de ${item.name}`} onClick={(event) => { event.stopPropagation(); moveCardImage(item.name, item.images.length, 1) }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); moveCardImage(item.name, item.images.length, 1) } }} className="project-image-arrow project-image-arrow-right"><ChevronRight size={18} /></span><div className="absolute inset-0 bg-gradient-to-t from-[#202020] via-transparent to-transparent opacity-80" /><span className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-[#202020]/30 transition group-hover:bg-[#09C895] group-hover:text-[#202020]"><ArrowUpRight size={18} /></span><div className="absolute bottom-6 left-6"><p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-[#09C895]">{item.category}</p><h3 className="text-xl font-medium">{item.name}</h3></div></div></button>)}</div></div><div className="mt-8 flex items-center justify-center gap-6"><button type="button" aria-label="Proyecto anterior" onClick={() => moveProjectSlide(-1)} className="carousel-arrow"><ChevronLeft size={18} /></button><div className="hidden items-center gap-2 md:flex">{Array.from({ length: projects.length - 2 }, (_, index) => <button type="button" key={index} aria-label={`Ir al grupo ${index + 1}`} onClick={() => setProjectSlide(index)} className={`carousel-dot ${projectSlide === index ? 'is-active' : ''}`} />)}</div><div className="flex items-center gap-2 md:hidden">{projects.map((item, index) => <button type="button" key={item.name} aria-label={`Ir a ${item.name}`} onClick={() => setProjectSlide(index)} className={`carousel-dot ${projectSlide === index ? 'is-active' : ''}`} />)}</div><button type="button" aria-label="Siguiente proyecto" onClick={() => moveProjectSlide(1)} className="carousel-arrow"><ChevronRight size={18} /></button></div></div></section>
-      <section id="nosotros" className="border-t border-white/10 bg-[#1b1b1b] px-6 py-28 lg:px-10 lg:py-40"><div className="mx-auto max-w-7xl"><div className="grid gap-16 lg:grid-cols-[1fr_.8fr]"><div><SectionLabel>Nosotros</SectionLabel><h2 className="max-w-2xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería aplicada,<br /><span className="text-[#186DD4]">soluciones eficientes.</span></h2></div><p className="max-w-xl self-end text-lg leading-8 text-white/60">En Bixar desarrollamos soluciones de ingeniería pensadas para llevarse a obra. Integramos cálculo, instalaciones, estudios técnicos y modelado BIM para resolver cada proyecto con precisión, coordinación y criterio constructivo.</p></div><div className="mt-20 border-t border-white/10"><p className="py-8 font-mono text-xs uppercase tracking-[0.24em] text-white/50">La base de nuestros proyectos</p><div className="grid border-b border-white/10 md:grid-cols-2">{pillars.map(([title, text, Icon]) => <div key={title as string} className="border-t border-white/10 p-7 lg:p-10"><Icon className="mb-10 text-[#09C895]" size={22} /><h3 className="text-2xl font-medium">{title as string}</h3><p className="mt-3 max-w-xs leading-7 text-white/50">{text as string}</p></div>)}</div></div></div></section>
+      <section id="proyectos" className="px-6 py-28 lg:px-10 lg:py-40">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+            <div>
+              <SectionLabel>Proyectos destacados</SectionLabel>
+              <h2 className="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">Trabajos que hablan<br /><span className="text-[#09C895]">por nosotros.</span></h2>
+            </div>
+            <p className="max-w-xs text-sm leading-6 text-white/50">Explor? una selecci?n de proyectos donde la ingenier?a se convierte en obra.</p>
+          </div>
 
-      <section className="relative overflow-hidden bg-[#1F2832] px-6 py-28 lg:px-10 lg:py-40"><div className="relative mx-auto max-w-7xl"><SectionLabel>Una forma distinta de hacer</SectionLabel><h2 className="max-w-5xl text-4xl font-semibold leading-[1.06] tracking-[-0.05em] sm:text-6xl lg:text-8xl">Nuestra ventaja competitiva es la <span className="text-[#09C895]">ingeniería coordinada.</span></h2><div className="mt-12 flex max-w-2xl gap-5 border-l border-[#09C895] pl-6"><Zap className="mt-1 shrink-0 text-[#09C895]" size={22} /><p className="text-lg leading-8 text-white/60">Integramos cálculo estructural, diseño de instalaciones y modelado BIM para desarrollar proyectos más precisos, detectar interferencias antes de la obra y optimizar cada etapa del proceso.</p></div></div></section>
+          <div className="project-carousel mt-16">
+            <div className="project-carousel-viewport">
+              <div ref={projectTrackRef} className="project-carousel-track" style={{ transform: projectTrackTransform }}>
+                {projects.map((item, index) => (
+                  <button key={item.name} onClick={() => openProject(index)} className="project-carousel-card group text-left">
+                    <div className="relative aspect-[4/5] overflow-hidden bg-[#2a2a2a]">
+                      <img src={item.images[cardImages[item.name] ?? 0]} alt={item.name} className="h-full w-full object-cover grayscale-[15%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+                      <span role="button" tabIndex={0} aria-label={`Imagen anterior de ${item.name}`} onClick={(event) => { event.stopPropagation(); moveCardImage(item.name, item.images.length, -1) }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); moveCardImage(item.name, item.images.length, -1) } }} className="project-image-arrow project-image-arrow-left"><ChevronLeft size={18} /></span>
+                      <span role="button" tabIndex={0} aria-label={`Siguiente imagen de ${item.name}`} onClick={(event) => { event.stopPropagation(); moveCardImage(item.name, item.images.length, 1) }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); moveCardImage(item.name, item.images.length, 1) } }} className="project-image-arrow project-image-arrow-right"><ChevronRight size={18} /></span>
+                    </div>
+                    <div className="mt-5 border-t border-white/10 pt-4">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#09C895]">{item.category}</p>
+                      <h3 className="mt-3 text-2xl font-medium">{item.name}</h3>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 flex items-center justify-center gap-4">
+              <button type="button" aria-label="Proyecto anterior" onClick={() => moveProjectSlide(-1)} className="carousel-arrow p-3"><ChevronLeft size={18} /></button>
+              <div className="flex items-center gap-2">
+                {projectSlideDots.map((index) => (
+                  <button key={index} type="button" aria-label={`Ir al proyecto ${index + 1}`} onClick={() => setProjectSlide(Math.max(0, Math.min(index, maxProjectSlide)))} className={`carousel-dot ${projectSlide === index ? 'is-active' : ''}`} />
+                ))}
+              </div>
+              <button type="button" aria-label="Siguiente proyecto" onClick={() => moveProjectSlide(1)} className="carousel-arrow p-3"><ChevronRight size={18} /></button>
+            </div>
+          </div>
+        </div>
+      </section>
+<section id="nosotros" className="border-t border-white/10 bg-[#1b1b1b] px-6 py-28 lg:px-10 lg:py-40"><div className="mx-auto max-w-7xl"><div className="grid gap-16 lg:grid-cols-[1fr_.8fr]"><div><SectionLabel>Nosotros</SectionLabel><h2 className="max-w-2xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Ingeniería aplicada,<br /><span className="text-[#186DD4]">soluciones eficientes.</span></h2></div><p className="max-w-xl self-end text-lg leading-8 text-white/60">En Bixar desarrollamos soluciones de ingeniería pensadas para llevarse a obra. Integramos cálculo, instalaciones, estudios técnicos y modelado BIM para resolver cada proyecto con precisión, coordinación y criterio constructivo.</p></div><div className="mt-20 border-t border-white/10"><p className="py-8 font-mono text-xs uppercase tracking-[0.24em] text-white/50">La base de nuestros proyectos</p><div className="grid border-b border-white/10 md:grid-cols-2">{pillars.map(([title, text, Icon]) => <div key={title as string} className="border-t border-white/10 p-7 lg:p-10"><Icon className="mb-10 text-[#09C895]" size={22} /><h3 className="text-2xl font-medium">{title as string}</h3><p className="mt-3 max-w-xs leading-7 text-white/50">{text as string}</p></div>)}</div></div></div></section>
+
+      <section className="relative overflow-hidden bg-[#1F2832] px-6 py-28 lg:px-10 lg:py-40"><div className="relative mx-auto max-w-7xl"><SectionLabel>Una forma distinta de hacer</SectionLabel><h2 className="max-w-5xl text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">Nuestra ventaja competitiva es la <span className="text-[#09C895]">ingeniería coordinada.</span></h2><div className="mt-12 flex max-w-2xl gap-5 border-l border-[#09C895] pl-6"><Zap className="mt-1 shrink-0 text-[#09C895]" size={22} /><p className="text-lg leading-8 text-white/60">Integramos cálculo estructural, diseño de instalaciones y modelado BIM para desarrollar proyectos más precisos, detectar interferencias antes de la obra y optimizar cada etapa del proceso.</p></div></div></section>
 
       <section id="contacto" className="border-t border-white/10 px-6 py-28 lg:px-10 lg:py-40"><div className="mx-auto grid max-w-7xl gap-20 lg:grid-cols-[.8fr_1.2fr]"><div><SectionLabel>Contacto</SectionLabel><h2 className="text-5xl font-semibold leading-tight tracking-[-0.05em] sm:text-7xl">Evaluemos<br /><span className="text-[#186DD4]">tu proyecto.</span></h2><div className="mt-20 space-y-6 text-sm text-white/55"><div className="flex gap-3"><MapPin className="shrink-0 text-[#09C895]" size={18} /><span>Sarmiento 1564<br />Concepción del Uruguay, E.R.</span></div><a href="mailto:hola@bixar.com.ar" className="flex gap-3 hover:text-white"><Mail className="text-[#09C895]" size={18} />hola@bixar.com.ar</a><div className="flex gap-5 pt-5 font-mono text-xs uppercase tracking-widest"><a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="hover:text-[#09C895]">LinkedIn</a><a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#09C895]">Instagram</a><a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="hover:text-[#09C895]">Facebook</a></div></div></div><form onSubmit={(event) => { event.preventDefault(); setSent(true) }} className="space-y-8"><label className="form-label">Nombre y apellido<input required className="form-input" /></label><label className="form-label">Email<input required type="email" className="form-input" /></label><label className="form-label">Mensaje<textarea required rows={5} className="form-input resize-none" /></label><button className="button-primary" type="submit">{sent ? 'Mensaje enviado' : 'Evaluar proyecto'} <ArrowUpRight size={16} /></button>{sent && <p className="flex items-center gap-2 text-sm text-[#09C895]"><Check size={16} /> Gracias, nos pondremos en contacto.</p>}</form></div></section>
 

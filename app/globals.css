@@ -60,9 +60,9 @@ main > section:not(#inicio) > * { opacity: 1; transform: translateY(0); transiti
 .form-input { display: block; width: 100%; margin-top: .8rem; border: 0; border-bottom: 1px solid rgba(255,255,255,.25); background: transparent; padding: .8rem 0; color: #fff; font-family: var(--font-sans); font-size: 1.1rem; outline: none; transition: border-color .2s; }
 .form-input:focus { border-color: #09c895; }
 .project-carousel-viewport { overflow: hidden; }
-.project-carousel-track { display: flex; gap: 1.25rem; transform: translateX(calc(var(--project-slide) * -33.333%)); transition: transform .55s cubic-bezier(.22, 1, .36, 1); }
+.project-carousel-track { display: flex; gap: 1.25rem; will-change: transform; transition: transform .65s cubic-bezier(.22, 1, .36, 1); }
 .project-carousel-card { flex: 0 0 calc((100% - 2.5rem) / 3); }
-.carousel-arrow { display: flex; width: 2.75rem; height: 2.75rem; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.24); color: rgba(255,255,255,.72); transition: border-color .2s, background-color .2s, color .2s; }
+.carousel-arrow { display: flex; width: 2.75rem; height: 2.75rem; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.24); border-radius: 0; color: rgba(255,255,255,.72); transition: border-color .2s, background-color .2s, color .2s; }
 .carousel-arrow:hover { border-color: #09c895; background: #09c895; color: #202020; }
 .carousel-dot { width: .45rem; height: .45rem; border-radius: 999px; background: rgba(255,255,255,.25); transition: width .25s, background-color .25s; }
 .carousel-dot:hover { background: rgba(255,255,255,.65); }
@@ -99,7 +99,6 @@ main > [role="dialog"]:not(.mobile-image-viewer) > div > div.relative > img { wi
 }
 @media (max-width: 767px) {
   .specialty-carousel-slide { height: 18rem; }
-  .project-carousel-track { transform: translateX(calc(var(--project-slide) * -100%)); }
   .project-carousel-card { flex-basis: 100%; }
   main > [role="dialog"]:not(.mobile-image-viewer) > div > div.relative { display: none; }
   main > [role="dialog"]:not(.mobile-image-viewer) > div { max-height: calc(100vh - 2rem); }
