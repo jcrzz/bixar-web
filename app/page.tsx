@@ -336,7 +336,7 @@ export default function Page() {
               <SectionLabel>Proyectos destacados</SectionLabel>
               <h2 className="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">Trabajos que hablan<br /><span className="text-[#09C895]">por nosotros.</span></h2>
             </div>
-            <p className="max-w-xs text-sm leading-6 text-white/50">Explor? una selecci?n de proyectos donde la ingenier?a se convierte en obra.</p>
+            <p className="max-w-sm justify-self-end text-right text-lg leading-8 text-white/50">Explora una selección de proyectos donde la ingeniería se convierte en obra.</p>
           </div>
 
           <div className="project-carousel mt-16">
