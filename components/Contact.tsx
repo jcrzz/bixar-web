@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowUpRight, Check, Mail, MapPin } from 'lucide-react'
+import { ArrowUpRight, Check, Mail, MapPin, Phone } from 'lucide-react'
 import { SectionLabel } from './SectionLabel'
 
 export function Contact() {
@@ -21,45 +21,32 @@ export function Contact() {
             <br />
             <span className="text-[#186DD4]">tu proyecto.</span>
           </h2>
+          <p className="mt-6 max-w-md text-sm text-white/55">
+            Coordinamos una reunión sin compromiso para evaluar alcance, plazos y
+            presupuesto.
+          </p>
           <div className="mt-20 space-y-6 text-sm text-white/55">
-            <div className="flex gap-3">
+            <a
+              href="https://www.google.com/maps/place/Sarmiento+1564,+Concepci%C3%B3n+del+Uruguay,+Entre+R%C3%ADos/@-32.4893701,-58.2494713,1018m/data=!3m2!1e3!4b1!4m6!3m5!1s0x95afdbb20f99e7e3:0x7e26bd81ffe2d993!8m2!3d-32.4893701!4d-58.246891!16s%2Fg%2F11c25fn4ll?entry=ttu&g_ep=EgoyMDI2MDkyNy4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noreferrer"
+              className="flex gap-3 hover:text-white"
+            >
               <MapPin className="shrink-0 text-[#09C895]" size={18} />
               <span>
                 Sarmiento 1564
                 <br />
                 Concepción del Uruguay, E.R.
               </span>
-            </div>
-            <a href="mailto:hola@bixar.com.ar" className="flex gap-3 hover:text-white">
-              <Mail className="text-[#09C895]" size={18} />
-              hola@bixar.com.ar
             </a>
-            <div className="flex gap-5 pt-5 font-mono text-xs uppercase tracking-widest">
-              <a
-                href="https://www.linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-[#09C895]"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://www.instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-[#09C895]"
-              >
-                Instagram
-              </a>
-              <a
-                href="https://www.facebook.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-[#09C895]"
-              >
-                Facebook
-              </a>
-            </div>
+            <a href="mailto:bixar.ingenieria@gmail.com" className="flex gap-3 hover:text-white">
+              <Mail className="text-[#09C895]" size={18} />
+              bixar.ingenieria@gmail.com
+            </a>
+            <a href="tel:+5492901307648" className="flex gap-3 hover:text-white">
+              <Phone className="text-[#09C895]" size={18} />
+              2901307648
+            </a>
           </div>
         </div>
 

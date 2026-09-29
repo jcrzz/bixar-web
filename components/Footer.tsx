@@ -4,8 +4,8 @@ import { SocialIcon } from './SocialIcon'
 
 const socialLinks = [
   { network: 'linkedin' as const, href: 'https://www.linkedin.com', label: 'LinkedIn' },
-  { network: 'instagram' as const, href: 'https://www.instagram.com', label: 'Instagram' },
-  { network: 'facebook' as const, href: 'https://www.facebook.com', label: 'Facebook' },
+  { network: 'instagram' as const, href: 'https://www.instagram.com/bixaringenieria/', label: 'Instagram' },
+  { network: 'facebook' as const, href: 'https://www.facebook.com/bixaringenieria', label: 'Facebook' },
 ]
 
 export function Footer() {
@@ -17,7 +17,6 @@ export function Footer() {
           <div>
             <Logo />
             <p className="mt-7 max-w-md text-sm leading-6 text-white/55">
-              Integramos Ingeniería, Arquitectura y Construcción bajo una sola firma.
               Soluciones técnicas y creativas, ejecutadas con precisión.
             </p>
             <div className="mt-7 flex gap-3">
@@ -43,20 +42,25 @@ export function Footer() {
             </h2>
             <div className="mt-7 space-y-5 text-sm text-white/60">
               <a
-                href="mailto:contacto@bixar.com"
+                href="mailto:bixar.ingenieria@gmail.com"
                 className="flex items-center gap-3 transition hover:text-white"
               >
-                <Mail size={17} /> contacto@bixar.com
+                <Mail size={17} /> bixar.ingenieria@gmail.com
               </a>
               <a
                 href="tel:+541100000000"
                 className="flex items-center gap-3 transition hover:text-white"
               >
-                <MoveUpRight size={17} /> +54 11 0000 0000
+                <MoveUpRight size={17} /> +54 2901307648
               </a>
-              <p className="flex items-center gap-3">
-                <MapPin size={17} /> Buenos Aires, AR
-              </p>
+              <a
+                href="https://www.google.com/maps/place/Sarmiento+1564,+Concepci%C3%B3n+del+Uruguay,+Entre+R%C3%ADos/@-32.4893701,-58.2494713,1018m/data=!3m2!1e3!4b1!4m6!3m5!1s0x95afdbb20f99e7e3:0x7e26bd81ffe2d993!8m2!3d-32.4893701!4d-58.246891!16s%2Fg%2F11c25fn4ll?entry=ttu&g_ep=EgoyMDI2MDkyNy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 transition hover:text-white"
+              >
+                <MapPin size={17} /> Entre Rios, AR
+              </a>
             </div>
           </div>
         </div>
