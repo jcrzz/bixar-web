@@ -1,6 +1,6 @@
-onlyBuiltDependencies:
-  - unrs-resolver
-
 minimumReleaseAgeExclude:
   - '@next/*'
   - next
+
+allowBuilds:
+  unrs-resolver: true
