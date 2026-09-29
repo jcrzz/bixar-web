@@ -45,7 +45,7 @@ export function Contact() {
             </a>
             <a href="tel:+5492901307648" className="flex gap-3 hover:text-white">
               <Phone className="text-[#09C895]" size={18} />
-              2901307648
+              2901-307648
             </a>
           </div>
         </div>
