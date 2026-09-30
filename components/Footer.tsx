@@ -3,7 +3,7 @@ import { Logo } from './Logo'
 import { SocialIcon } from './SocialIcon'
 
 const socialLinks = [
-  { network: 'linkedin' as const, href: 'https://www.linkedin.com', label: 'LinkedIn' },
+  { network: 'linkedin' as const, href: 'https://www.linkedin.com/company/bixar-ingenier%C3%ADa/', label: 'LinkedIn' },
   { network: 'instagram' as const, href: 'https://www.instagram.com/bixaringenieria/', label: 'Instagram' },
   { network: 'facebook' as const, href: 'https://www.facebook.com/bixaringenieria', label: 'Facebook' },
 ]

@@ -18,7 +18,7 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-[#202020]/90 backdrop-blur-xl transition-transform duration-300 ${
+      className={`fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-[#202020]/1 backdrop-blur-xl transition-transform duration-300 ${
         navVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >

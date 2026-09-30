@@ -5,18 +5,22 @@ export function Hero() {
   return (
     <section
       id="inicio"
-      className="relative flex min-h-[780px] items-end border-b border-white/10 px-6 pb-20 pt-36 lg:min-h-screen lg:px-10 lg:pb-28"
+      className="relative flex min-h-[780px] items-end overflow-hidden border-b border-white/10 px-6 pb-20 pt-36 lg:min-h-screen lg:px-10 lg:pb-28"
     >
-      {/* Background */}
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          backgroundImage:
-            "linear-gradient(90deg, #202020 0%, rgba(32,32,32,.78) 40%, rgba(32,32,32,.25) 100%), url('https://images.unsplash.com/photo-1503387762-592dea58ef25?auto=format&fit=crop&w=2200&q=85')",
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-        }}
-      />
+      {/* Background video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ opacity: 1 }}
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
+
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#202020]/90 via-[#202020]/50 to-[#202020]/10" />
 
       {/* Decorative element */}
       <div className="absolute right-[12%] top-1/3 hidden h-56 w-56 border border-[#186DD4]/40 lg:block">
@@ -24,7 +28,7 @@ export function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative mx-auto w-full max-w-7xl">
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
         <SectionLabel>Ingeniería que transforma</SectionLabel>
         <h1 className="max-w-4xl text-balance text-5xl font-bold leading-[1.02] tracking-[-0.04em] sm:text-6xl lg:text-[5rem]">
           Proyectos integrales,

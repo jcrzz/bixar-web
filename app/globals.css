@@ -88,10 +88,11 @@ main > section:not(#inicio) > * {
   font-family: var(--font-sans);
 }
 
-/* Logo gradient border (green → blue) */
-.logo-box {
-  border: 1px solid;
-  border-image: linear-gradient(to right, #09c895, #186dd4) 1;
+/* Logo image */
+.logo-img {
+  height: 2.25rem;
+  width: 2.25rem;
+  object-fit: contain;
 }
 
 /* Selection */
