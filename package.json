@@ -11,16 +11,16 @@
     "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
     "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "db:studio": "prisma studio"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@prisma/client": "^6.19.3",
     "@vercel/analytics": "1.6.1",
+    "@vercel/blob": "^2.8.0",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -44,6 +44,7 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^18.0.5",
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
     "postcss": "^8.5",

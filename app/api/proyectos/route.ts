@@ -1,16 +1,31 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { projectSchema } from '@/lib/validations/project'
+import { unauthorizedIfNoSession } from '@/lib/api-auth'
 
+/**
+ * Public read endpoint: only published projects, so drafts never leak.
+ * The admin panel reads straight from Prisma in a server component instead.
+ */
 export async function GET() {
   const projects = await prisma.project.findMany({
+    where: { published: true },
     orderBy: { createdAt: 'desc' },
-    include: { images: true },
+    include: { images: { orderBy: { order: 'asc' } } },
   })
-  return NextResponse.json(projects)
+
+  return NextResponse.json(
+    projects.map(({ images, ...project }) => ({
+      ...project,
+      images: images.map((image) => image.url),
+    }))
+  )
 }
 
 export async function POST(request: Request) {
+  const unauthorized = await unauthorizedIfNoSession()
+  if (unauthorized) return unauthorized
+
   try {
     const body = await request.json()
     const data = projectSchema.parse(body)

@@ -1,6 +1,11 @@
 import { getSession } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 
+// The panel reads the session cookie and live project rows on every request, so
+// it must never be prerendered at build time (which would need a DB connection
+// and would bake in the wrong access control).
+export const dynamic = 'force-dynamic'
+
 export default async function AdminLayout({
   children,
 }: {

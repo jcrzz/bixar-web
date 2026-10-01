@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { projects } from '@/data/projects'
 import type { Project } from '@/types'
 import { SectionLabel } from './SectionLabel'
 import { ProjectModal } from './ProjectModal'
 
-export function Projects() {
+interface ProjectsProps {
+  projects: Project[]
+}
+
+export function Projects({ projects }: ProjectsProps) {
   const [activeProject, setActiveProject] = useState<number | null>(null)
   const [projectSlide, setProjectSlide] = useState(0)
   const [cardImages, setCardImages] = useState<Record<string, number>>({})
@@ -90,110 +93,112 @@ export function Projects() {
           </div>
 
           {/* Carousel */}
-          <div className="project-carousel mt-16">
-            <div className="project-carousel-viewport">
-              <div
-                ref={projectTrackRef}
-                className="project-carousel-track"
-                style={{ transform: projectTrackTransform }}
-              >
-                {projects.map((item, index) => (
-                  <button
-                    key={item.name}
-                    onClick={() => openProject(index)}
-                    className="project-carousel-card group text-left"
-                    aria-label={`Ver proyecto ${item.name}`}
-                  >
-                    <div className="relative aspect-[4/5] overflow-hidden bg-[#2a2a2a]">
-                      <img
-                        src={item.images[cardImages[item.name] ?? 0]}
-                        alt={item.name}
-                        className="h-full w-full object-cover grayscale-[15%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                        loading="lazy"
-                      />
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Imagen anterior de ${item.name}`}
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          moveCardImage(item.name, item.images.length, -1)
-                        }}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault()
+          {projects.length > 0 && (
+            <div className="project-carousel mt-16">
+              <div className="project-carousel-viewport">
+                <div
+                  ref={projectTrackRef}
+                  className="project-carousel-track"
+                  style={{ transform: projectTrackTransform }}
+                >
+                  {projects.map((item, index) => (
+                    <button
+                      key={item.name}
+                      onClick={() => openProject(index)}
+                      className="project-carousel-card group text-left"
+                      aria-label={`Ver proyecto ${item.name}`}
+                    >
+                      <div className="relative aspect-[4/5] overflow-hidden bg-[#2a2a2a]">
+                        <img
+                          src={item.images[cardImages[item.name] ?? 0]}
+                          alt={item.name}
+                          className="h-full w-full object-cover grayscale-[15%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                          loading="lazy"
+                        />
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Imagen anterior de ${item.name}`}
+                          onClick={(event) => {
                             event.stopPropagation()
                             moveCardImage(item.name, item.images.length, -1)
-                          }
-                        }}
-                        className="project-image-arrow project-image-arrow-left"
-                      >
-                        <ChevronLeft size={18} />
-                      </span>
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Siguiente imagen de ${item.name}`}
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          moveCardImage(item.name, item.images.length, 1)
-                        }}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault()
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault()
+                              event.stopPropagation()
+                              moveCardImage(item.name, item.images.length, -1)
+                            }
+                          }}
+                          className="project-image-arrow project-image-arrow-left"
+                        >
+                          <ChevronLeft size={18} />
+                        </span>
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Siguiente imagen de ${item.name}`}
+                          onClick={(event) => {
                             event.stopPropagation()
                             moveCardImage(item.name, item.images.length, 1)
-                          }
-                        }}
-                        className="project-image-arrow project-image-arrow-right"
-                      >
-                        <ChevronRight size={18} />
-                      </span>
-                    </div>
-                    <div className="mt-5 border-t border-white/10 pt-4">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#09C895]">
-                        {item.category}
-                      </p>
-                      <h3 className="mt-3 text-2xl font-medium">{item.name}</h3>
-                    </div>
-                  </button>
-                ))}
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault()
+                              event.stopPropagation()
+                              moveCardImage(item.name, item.images.length, 1)
+                            }
+                          }}
+                          className="project-image-arrow project-image-arrow-right"
+                        >
+                          <ChevronRight size={18} />
+                        </span>
+                      </div>
+                      <div className="mt-5 border-t border-white/10 pt-4">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#09C895]">
+                          {item.category}
+                        </p>
+                        <h3 className="mt-3 text-2xl font-medium">{item.name}</h3>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Carousel controls */}
-            <div className="mt-8 flex items-center justify-center gap-4">
-              <button
-                type="button"
-                aria-label="Proyecto anterior"
-                onClick={() => moveProjectSlide(-1)}
-                className="carousel-arrow p-3"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <div className="flex items-center gap-2">
-                {projectSlideDots.map((index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    aria-label={`Ir al proyecto ${index + 1}`}
-                    onClick={() =>
-                      setProjectSlide(Math.max(0, Math.min(index, maxProjectSlide)))
-                    }
-                    className={`carousel-dot ${projectSlide === index ? 'is-active' : ''}`}
-                  />
-                ))}
+              {/* Carousel controls */}
+              <div className="mt-8 flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  aria-label="Proyecto anterior"
+                  onClick={() => moveProjectSlide(-1)}
+                  className="carousel-arrow p-3"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <div className="flex items-center gap-2">
+                  {projectSlideDots.map((index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      aria-label={`Ir al proyecto ${index + 1}`}
+                      onClick={() =>
+                        setProjectSlide(Math.max(0, Math.min(index, maxProjectSlide)))
+                      }
+                      className={`carousel-dot ${projectSlide === index ? 'is-active' : ''}`}
+                    />
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  aria-label="Siguiente proyecto"
+                  onClick={() => moveProjectSlide(1)}
+                  className="carousel-arrow p-3"
+                >
+                  <ChevronRight size={18} />
+                </button>
               </div>
-              <button
-                type="button"
-                aria-label="Siguiente proyecto"
-                onClick={() => moveProjectSlide(1)}
-                className="carousel-arrow p-3"
-              >
-                <ChevronRight size={18} />
-              </button>
             </div>
-          </div>
+          )}
         </div>
       </section>
 

@@ -9,7 +9,13 @@ __v0_jsx-dev-runtime.ts
 # Environment variables
 .env*.local
 
+# Local database (production uses Neon/Postgres)
+prisma/*.db
+prisma/*.db-journal
+prisma/*.db.bak
+
 # Common ignores
 node_modules
 .next/
 .DS_Store
+tsconfig.tsbuildinfo

@@ -1,20 +1,23 @@
-'use client'
-
-import { useRevealOnScroll } from '@/hooks/useRevealOnScroll'
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Hero'
 import { Specialties } from '@/components/Specialties'
-import { Projects } from '@/components/Projects'
+import { ProjectsSection } from '@/components/ProjectsSection'
 import { About } from '@/components/About'
 import { Advantage } from '@/components/Advantage'
 import { Contact } from '@/components/Contact'
 import { Footer } from '@/components/Footer'
+import { RevealOnScroll } from '@/components/RevealOnScroll'
+
+// The projects section reads from Postgres, so revalidate instead of baking the
+// page at build time. 60s keeps the marketing site fast while making panel
+// edits show up within a minute.
+export const revalidate = 60
 
 export default function Page() {
-  useRevealOnScroll()
-
   return (
     <main className="min-h-screen overflow-hidden bg-[#202020] text-white">
+      <RevealOnScroll />
+
       {/* Skip navigation for accessibility */}
       <a
         href="#inicio"
@@ -26,7 +29,7 @@ export default function Page() {
       <Navbar />
       <Hero />
       <Specialties />
-      <Projects />
+      <ProjectsSection />
       <About />
       <Advantage />
       <Contact />

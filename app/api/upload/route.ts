@@ -1,26 +1,28 @@
 import { NextResponse } from 'next/server'
-import { writeFile } from 'fs/promises'
-import path from 'path'
+import { storeImage, UploadError } from '@/lib/storage'
+import { unauthorizedIfNoSession } from '@/lib/api-auth'
 
 export async function POST(request: Request) {
+  const unauthorized = await unauthorizedIfNoSession()
+  if (unauthorized) return unauthorized
+
   try {
     const formData = await request.formData()
-    const file = formData.get('file') as File
+    const file = formData.get('file')
 
-    if (!file) {
+    if (!(file instanceof File)) {
       return NextResponse.json({ error: 'No se recibió archivo' }, { status: 400 })
     }
 
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+    const url = await storeImage(file)
 
-    const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`
-    const filepath = path.join(process.cwd(), 'public', 'uploads', filename)
-
-    await writeFile(filepath, buffer)
-
-    return NextResponse.json({ url: `/uploads/${filename}` })
+    return NextResponse.json({ url })
   } catch (error) {
+    if (error instanceof UploadError) {
+      return NextResponse.json({ error: error.message }, { status: 400 })
+    }
+
+    console.error('Error al subir archivo', error)
     return NextResponse.json({ error: 'Error al subir archivo' }, { status: 500 })
   }
 }
