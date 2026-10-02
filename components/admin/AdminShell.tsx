@@ -17,9 +17,15 @@ function Brand() {
       href="/admin"
       className="flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
-      <span className="grid size-8 place-items-center rounded-lg bg-primary text-[0.8rem] font-bold text-primary-foreground">
-        BX
-      </span>
+      {/* The mark is vertical (136x152) with a transparent background, so it
+          gets an `object-contain` box instead of a fixed ratio that would
+          distort it. Same treatment as .logo-img on the public site. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/BIXAR-LOGO-SOLO.png"
+        alt="Bixar Ingeniería"
+        className="size-9 shrink-0 object-contain"
+      />
       <span className="text-sm font-bold tracking-[0.18em] text-foreground">
         BIXAR
       </span>
