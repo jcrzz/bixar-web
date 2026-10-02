@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { projectSchema } from '@/lib/validations/project'
 import { unauthorizedIfNoSession } from '@/lib/api-auth'
+import { isRecordNotFound, toValidationError } from '@/lib/api-errors'
 
 export async function GET(
   _request: Request,
@@ -37,26 +38,38 @@ export async function PUT(
 
     const { images, ...projectData } = data
 
-    // The gallery is replaced wholesale, so clear the previous rows first.
-    await prisma.projectImage.deleteMany({ where: { projectId: id } })
+    // The gallery is replaced wholesale, so the previous rows are cleared
+    // first. Both statements must be atomic: without the transaction, a failure
+    // in the update (bad id, DB error) would leave the project with its
+    // gallery permanently deleted.
+    const project = await prisma.$transaction(async (tx) => {
+      await tx.projectImage.deleteMany({ where: { projectId: id } })
 
-    const project = await prisma.project.update({
-      where: { id },
-      data: {
-        ...projectData,
-        images: {
-          create: images.map((url, index) => ({ url, order: index })),
+      return tx.project.update({
+        where: { id },
+        data: {
+          ...projectData,
+          images: {
+            create: images.map((url, index) => ({ url, order: index })),
+          },
         },
-      },
-      include: { images: true },
+        include: { images: true },
+      })
     })
 
     return NextResponse.json(project)
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 400 })
+    const validation = toValidationError(error)
+    if (validation) {
+      return NextResponse.json(validation, { status: 400 })
     }
-    return NextResponse.json({ error: 'Error desconocido' }, { status: 500 })
+
+    if (isRecordNotFound(error)) {
+      return NextResponse.json({ error: 'Proyecto no encontrado' }, { status: 404 })
+    }
+
+    console.error('Error al actualizar proyecto', error)
+    return NextResponse.json({ error: 'Error al actualizar el proyecto' }, { status: 500 })
   }
 }
 
@@ -74,11 +87,11 @@ export async function DELETE(
     await prisma.project.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {
-    if (error instanceof Error && 'code' in error && error.code === 'P2025') {
+    if (isRecordNotFound(error)) {
       return NextResponse.json({ error: 'Proyecto no encontrado' }, { status: 404 })
     }
 
     console.error('Error al eliminar proyecto', error)
-    return NextResponse.json({ error: 'Error al eliminar' }, { status: 500 })
+    return NextResponse.json({ error: 'Error al eliminar el proyecto' }, { status: 500 })
   }
 }

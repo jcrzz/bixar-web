@@ -16,8 +16,17 @@
   --color-accent: #09c895;
   --color-muted: #242a31;
   --color-muted-foreground: rgba(255,255,255,.55);
+  /* Consumed by the `destructive` button variant in components/ui/button.tsx.
+     Without it those utilities never generate and the variant renders colorless. */
+  --color-destructive: #e5484d;
+  --color-destructive-foreground: #f7f8f9;
   --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* Consumed by the small button sizes (`rounded-[min(var(--radius-md),…)]`).
+     Scoped to the admin panel: the public site keeps its 90° corners. */
+  --radius-md: 0.5rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
 }
 
 :root {

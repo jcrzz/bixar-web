@@ -2,15 +2,7 @@ import { writeFile } from 'fs/promises'
 import path from 'path'
 import { put } from '@vercel/blob'
 
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024
-
-const ALLOWED_TYPES = new Set([
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  'image/avif',
-  'image/gif',
-])
+import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES } from '@/lib/upload-rules'
 
 export class UploadError extends Error {}
 
@@ -31,7 +23,7 @@ export async function storeImage(file: File): Promise<string> {
     throw new UploadError('La imagen supera el límite de 10 MB')
   }
 
-  if (!ALLOWED_TYPES.has(file.type)) {
+  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
     throw new UploadError('Formato no permitido. Usá JPG, PNG, WebP, AVIF o GIF.')
   }
 

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { projectSchema } from '@/lib/validations/project'
 import { unauthorizedIfNoSession } from '@/lib/api-auth'
+import { toValidationError } from '@/lib/api-errors'
 
 /**
  * Public read endpoint: only published projects, so drafts never leak.
@@ -44,9 +45,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json(project, { status: 201 })
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 400 })
+    const validation = toValidationError(error)
+    if (validation) {
+      return NextResponse.json(validation, { status: 400 })
     }
-    return NextResponse.json({ error: 'Error desconocido' }, { status: 500 })
+
+    console.error('Error al crear proyecto', error)
+    return NextResponse.json({ error: 'Error al crear el proyecto' }, { status: 500 })
   }
 }
