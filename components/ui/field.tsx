@@ -15,6 +15,7 @@ type FieldProps = {
   htmlFor: string
   hint?: string
   error?: string
+  required?: boolean
   children: React.ReactNode
   className?: string
 }
@@ -24,6 +25,7 @@ export function Field({
   htmlFor,
   hint,
   error,
+  required,
   children,
   className,
 }: FieldProps) {
@@ -34,6 +36,14 @@ export function Field({
         className="block text-xs font-medium tracking-wide text-muted-foreground uppercase"
       >
         {label}
+        {required && (
+          // Hidden from assistive tech: they get the same information from
+          // `aria-required` on the control, and announcing "asterisco" on every
+          // mandatory field is just noise.
+          <span aria-hidden className="ml-0.5 text-destructive">
+            *
+          </span>
+        )}
       </label>
 
       {children}
@@ -53,6 +63,7 @@ export function Input({ className, invalid, ...props }: InputProps) {
   return (
     <input
       className={cn(CONTROL_BASE, CONTROL_TONE(invalid), className)}
+      aria-invalid={invalid || undefined}
       {...props}
     />
   )
@@ -69,6 +80,7 @@ export function Textarea({ className, invalid, ...props }: TextareaProps) {
         'resize-y leading-relaxed',
         className,
       )}
+      aria-invalid={invalid || undefined}
       {...props}
     />
   )

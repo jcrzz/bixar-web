@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { LoaderCircle } from 'lucide-react'
 
@@ -64,6 +64,10 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitting, setSubmitting] = useState(false)
 
+  const nameRef = useRef<HTMLInputElement>(null)
+  const categoryRef = useRef<HTMLInputElement>(null)
+  const descriptionRef = useRef<HTMLTextAreaElement>(null)
+
   function validate(): FormErrors {
     const next: FormErrors = {}
 
@@ -75,6 +79,39 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
     return next
   }
 
+  /**
+   * Takes the user to the first problem instead of making them scan the form
+   * for what the toast is talking about. Reading order is the layout order.
+   */
+  function revealFirstError(clientErrors: FormErrors) {
+    const order: (keyof FormErrors)[] = [
+      'name',
+      'category',
+      'description',
+      'cover',
+    ]
+    const first = order.find((key) => clientErrors[key])
+
+    if (!first) return
+
+    if (first === 'cover') {
+      // The drop target is a div, so it can't take focus. Scrolling it into
+      // view plus the red border is enough to point at it.
+      document
+        .getElementById('project-cover')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+
+    const ref = {
+      name: nameRef,
+      category: categoryRef,
+      description: descriptionRef,
+    }[first]
+
+    ref.current?.focus()
+  }
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
 
@@ -82,6 +119,7 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
     setErrors(clientErrors)
 
     if (Object.keys(clientErrors).length > 0) {
+      revealFirstError(clientErrors)
       toast({
         title: 'Revisá los campos marcados',
         description: 'Falta completar algunos datos obligatorios.',
@@ -156,25 +194,39 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
           description="Los datos que se ven en la web y en las tarjetas del sitio."
         >
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Título" htmlFor="name" error={errors.name}>
+            <Field
+              label="Título"
+              htmlFor="name"
+              error={errors.name}
+              required
+            >
               <Input
                 id="name"
+                ref={nameRef}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Planta industrial Paraná"
                 maxLength={200}
+                aria-required="true"
                 invalid={Boolean(errors.name)}
                 autoFocus
               />
             </Field>
 
-            <Field label="Categoría" htmlFor="category" error={errors.category}>
+            <Field
+              label="Categoría"
+              htmlFor="category"
+              error={errors.category}
+              required
+            >
               <Input
                 id="category"
+                ref={categoryRef}
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder="Ingeniería"
                 maxLength={100}
+                aria-required="true"
                 invalid={Boolean(errors.category)}
               />
             </Field>
@@ -184,13 +236,16 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
             label="Descripción"
             htmlFor="description"
             error={errors.description}
+            required
           >
             <Textarea
               id="description"
+              ref={descriptionRef}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={5}
               placeholder="Qué se hizo, con qué técnica, en qué plazo."
+              aria-required="true"
               invalid={Boolean(errors.description)}
             />
           </Field>
@@ -235,10 +290,13 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
           description="La portada es la que se usa en las tarjetas. La galería se abre al hacer clic en el proyecto."
         >
           <ImageDropzone
+            id="project-cover"
             label="Imagen de portada"
+            required
             value={cover ? [cover] : []}
             onChange={(urls) => setCover(urls[0] ?? '')}
             error={errors.cover}
+            hint="Obligatoria. Se usa en las tarjetas del sitio."
           />
 
           <ImageDropzone

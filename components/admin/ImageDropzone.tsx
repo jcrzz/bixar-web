@@ -12,6 +12,10 @@ import {
 type ImageDropzoneProps = {
   label: string
   hint?: string
+  /** Lets the form scroll this field into view when validation fails. */
+  id?: string
+  /** Renders the red asterisk, matching the `Field` treatment. */
+  required?: boolean
   /** Gallery mode: appends instead of replacing, and renders a grid. */
   multiple?: boolean
   /** Remote URLs already stored for this field. */
@@ -38,6 +42,8 @@ async function uploadFile(file: File): Promise<string> {
 export function ImageDropzone({
   label,
   hint,
+  id,
+  required,
   multiple = false,
   value,
   onChange,
@@ -72,11 +78,13 @@ export function ImageDropzone({
     }
   }, [])
 
-  // Clear the input so re-picking the same file still fires a change event.
+  // Clear the input so re-picking the same file still fires a change event, and
+  // drop any stale upload error now that the value moved underneath it.
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.value = ''
     }
+    setLocalError(null)
   }, [value.length])
 
   const handleFiles = useCallback(
@@ -125,11 +133,21 @@ export function ImageDropzone({
 
   const empty = value.length === 0 && !pendingPreview
 
+  // The form's own error ("Subí una imagen de portada") wins over a leftover
+  // upload error: the missing value is the thing the user has to act on.
+  const visibleError = error || localError
+  const hasError = Boolean(visibleError)
+
   return (
-    <div className={cn('space-y-2', className)}>
+    <div id={id} className={cn('space-y-2', className)}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
           {label}
+          {required && (
+            <span aria-hidden className="ml-0.5 text-destructive">
+              *
+            </span>
+          )}
         </span>
         <span className="text-xs text-muted-foreground/70">
           JPG, PNG, WebP, AVIF o GIF · máx. 10 MB
@@ -214,9 +232,13 @@ export function ImageDropzone({
         }}
         className={cn(
           'rounded-lg border-2 border-dashed transition-colors duration-150',
+          // Drag feedback outranks the error tint, otherwise the zone stops
+          // reading as invalid the moment the user drags a file over it.
           dragging
             ? 'border-primary bg-primary/10'
-            : 'border-input hover:border-white/25',
+            : hasError
+              ? 'border-destructive/60 bg-destructive/5'
+              : 'border-input hover:border-white/25',
         )}
       >
         <input
@@ -283,14 +305,14 @@ export function ImageDropzone({
         </div>
       )}
 
-      {(localError || error) && (
+      {visibleError && (
         <p className="flex items-start gap-1.5 text-xs text-destructive">
           <CircleAlert className="mt-px size-3.5 shrink-0" />
-          <span>{localError || error}</span>
+          <span>{visibleError}</span>
         </p>
       )}
 
-      {!localError && !error && hint && (
+      {!visibleError && hint && (
         <p className="text-xs text-muted-foreground/80">{hint}</p>
       )}
     </div>

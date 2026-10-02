@@ -1,4 +1,4 @@
-import { writeFile } from 'fs/promises'
+import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
 import { put } from '@vercel/blob'
 
@@ -9,10 +9,16 @@ export class UploadError extends Error {}
 /**
  * Stores an uploaded image and returns the URL to persist on the project.
  *
- * In production this goes to Vercel Blob, because Vercel's filesystem is
- * read-only and wiped on every deploy. Without a token we fall back to
- * `public/uploads` so local development keeps working, but we refuse to
- * pretend that works in production where it would silently lose files.
+ * Production writes to Vercel Blob, because Vercel's filesystem is read-only
+ * and wiped on every deploy. Local development falls back to `public/uploads`
+ * when no token is configured, and refuses to pretend otherwise in production
+ * where it would lose files.
+ *
+ * The fallback is deliberately limited to the *absent* token. A token that is
+ * present but rejected — private store, rotated value, revoked scopes — is a
+ * misconfiguration, not a missing feature, so it fails loudly in development
+ * too. Otherwise a stale token would keep working against `public/uploads`
+ * locally and only break in production, which is the worst way to find out.
  */
 export async function storeImage(file: File): Promise<string> {
   if (!file.size) {
@@ -29,28 +35,42 @@ export async function storeImage(file: File): Promise<string> {
 
   const extension = path.extname(file.name) || '.jpg'
   const key = `uploads/${Date.now()}-${crypto.randomUUID().slice(0, 8)}${extension}`
+  const token = process.env.BLOB_READ_WRITE_TOKEN
 
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const { url } = await put(key, file, {
-      access: 'public',
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-      addRandomSuffix: false,
-    })
-    return url
-  }
-
-  if (process.env.NODE_ENV === 'production') {
+  if (token) {
+    try {
+      const { url } = await put(key, file, {
+        access: 'public',
+        token,
+        addRandomSuffix: false,
+      })
+      return url
+    } catch (error) {
+      // Surface the SDK's own wording. It names the exact cause — e.g. "Cannot
+      // use public access on a private store" — which is a one-line fix, versus
+      // a generic "Error al subir archivo" that hides it entirely.
+      throw new UploadError(
+        `No se pudo guardar la imagen en Vercel Blob: ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
+  } else if (process.env.NODE_ENV === 'production') {
     throw new UploadError(
       'BLOB_READ_WRITE_TOKEN no está configurado. Sin él no se pueden guardar imágenes en producción.'
+    )
+  } else {
+    console.warn(
+      '[storage] BLOB_READ_WRITE_TOKEN no configurado; guardando en public/uploads. Las imágenes NO se van a publicar.'
     )
   }
 
   const bytes = Buffer.from(await file.arrayBuffer())
   const filename = path.basename(key)
-  await writeFile(
-    path.join(process.cwd(), 'public', 'uploads', filename),
-    bytes
-  )
+  const dir = path.join(process.cwd(), 'public', 'uploads')
+
+  // writeFile does not create parent directories, so a missing folder would
+  // otherwise surface as an opaque ENOENT on the very first upload.
+  await mkdir(dir, { recursive: true })
+  await writeFile(path.join(dir, filename), bytes)
 
   return `/uploads/${filename}`
 }

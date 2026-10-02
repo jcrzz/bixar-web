@@ -22,7 +22,11 @@ export async function POST(request: Request) {
 
     await createSession(admin.id)
     return NextResponse.json({ success: true })
-  } catch {
+  } catch (error) {
+    // Swallowed errors here are undiagnosable: Vercel only records the 500, not
+    // the cause, so a bad AUTH_SECRET or an unreachable DB look identical from
+    // the outside. The message is generic on purpose, the log is not.
+    console.error('Error en POST /api/auth/login', error)
     return NextResponse.json({ error: 'Error del servidor' }, { status: 500 })
   }
 }
