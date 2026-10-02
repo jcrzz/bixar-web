@@ -2,5 +2,13 @@ minimumReleaseAgeExclude:
   - '@next/*'
   - next
 
+# pnpm 12 only runs install/build scripts for the packages allowlisted here.
+# Anything missing makes `pnpm install` fail with ERR_PNPM_IGNORED_BUILDS,
+# which is how the Vercel build failed: @prisma/engines never downloaded the
+# query engine binary, so Prisma had no driver to connect with.
 allowBuilds:
   unrs-resolver: true
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  esbuild: true
