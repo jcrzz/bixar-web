@@ -1,6 +1,7 @@
-import { Mail, MapPin, MoveUpRight } from 'lucide-react'
+import { Mail, MapPin, Phone } from 'lucide-react'
 import { Logo } from './Logo'
 import { SocialIcon } from './SocialIcon'
+import { site } from '@/lib/site'
 
 const socialLinks = [
   { network: 'linkedin' as const, href: 'https://www.linkedin.com/company/bixar-ingenier%C3%ADa/', label: 'LinkedIn' },
@@ -42,16 +43,16 @@ export function Footer() {
             </h2>
             <div className="mt-7 space-y-5 text-sm text-white/60">
               <a
-                href="mailto:bixar.ingenieria@gmail.com"
+                href={`mailto:${site.email}`}
                 className="flex items-center gap-3 transition hover:text-white"
               >
-                <Mail size={17} /> bixar.ingenieria@gmail.com
+                <Mail size={17} /> {site.email}
               </a>
               <a
-                href="tel:+541100000000"
+                href={`tel:${site.phone.href}`}
                 className="flex items-center gap-3 transition hover:text-white"
               >
-                <MoveUpRight size={17} /> +54 2901-307648
+                <Phone size={17} /> {site.phone.display}
               </a>
               <a
                 href="https://www.google.com/maps/place/Sarmiento+1564,+Concepci%C3%B3n+del+Uruguay,+Entre+R%C3%ADos/@-32.4893701,-58.2494713,1018m/data=!3m2!1e3!4b1!4m6!3m5!1s0x95afdbb20f99e7e3:0x7e26bd81ffe2d993!8m2!3d-32.4893701!4d-58.246891!16s%2Fg%2F11c25fn4ll?entry=ttu&g_ep=EgoyMDI2MDkyNy4wIKXMDSoASAFQAw%3D%3D"

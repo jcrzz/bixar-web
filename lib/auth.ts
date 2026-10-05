@@ -61,10 +61,24 @@ export async function getSession() {
 
     const admin = await prisma.admin.findUnique({
       where: { id: payload.adminId as string },
-      select: { id: true, email: true, name: true },
+      select: { id: true, email: true, name: true, passwordChangedAt: true },
     })
 
-    return admin
+    if (!admin) return null
+
+    // The session cookie is a stateless JWT that outlives any password change,
+    // so resetting the password would otherwise not lock out whoever copied the
+    // cookie. Comparing the token's issue time against the last change makes the
+    // reset actually revoke outstanding sessions.
+    //
+    // `iat` has one-second resolution and passwordChangedAt is stored truncated
+    // to whole seconds, so a session created immediately after the change is not
+    // rejected by sub-second drift.
+    if (payload.iat && payload.iat * 1000 < admin.passwordChangedAt.getTime()) {
+      return null
+    }
+
+    return { id: admin.id, email: admin.email, name: admin.name }
   } catch {
     return null
   }
@@ -83,4 +97,26 @@ export async function verifyCredentials(email: string, password: string) {
   if (!valid) return null
 
   return { id: admin.id, email: admin.email, name: admin.name }
+}
+
+/**
+ * Replaces an admin's password and stamps the change.
+ *
+ * The timestamp is truncated to whole seconds on purpose: it is compared
+ * against a JWT's `iat`, which has one-second resolution. Keeping millisecond
+ * precision here would let a session created in the same second as the change
+ * be rejected as "older than the change", logging the user straight back out.
+ */
+export async function setAdminPassword(adminId: string, password: string) {
+  const passwordChangedAt = new Date(Math.floor(Date.now() / 1000) * 1000)
+
+  await prisma.admin.update({
+    where: { id: adminId },
+    data: {
+      passwordHash: await bcrypt.hash(password, 12),
+      passwordChangedAt,
+    },
+  })
+
+  return passwordChangedAt
 }

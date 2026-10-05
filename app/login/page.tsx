@@ -1,7 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { site } from '@/lib/site'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -45,9 +47,16 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm text-white/60">Email</label>
+            <label
+              htmlFor="login-email"
+              className="mb-1 block text-sm text-white/60"
+            >
+              Email
+            </label>
             <input
+              id="login-email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -56,11 +65,24 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm text-white/60">
-              Contraseña
-            </label>
+            <div className="mb-1 flex items-baseline justify-between">
+              <label
+                htmlFor="login-password"
+                className="block text-sm text-white/60"
+              >
+                Contraseña
+              </label>
+              <Link
+                href="/recuperar"
+                className="text-xs text-white/45 underline-offset-4 transition hover:text-[#09C895] hover:underline"
+              >
+                ¿La olvidaste?
+              </Link>
+            </div>
             <input
+              id="login-password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -68,7 +90,11 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-red-400">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
@@ -78,6 +104,12 @@ export default function LoginPage() {
             {loading ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
+
+        <p className="mt-8 text-center text-xs text-white/30">
+          <Link href="/" className="transition hover:text-white/60">
+            Volver a {site.name}
+          </Link>
+        </p>
       </div>
     </div>
   )

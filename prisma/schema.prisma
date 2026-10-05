@@ -29,9 +29,71 @@ model ProjectImage {
 }
 
 model Admin {
-  id           String @id @default(cuid())
-  email        String @unique
+  id       String @id @default(cuid())
+  email    String @unique
+  /// Argon2/bcrypt hash, never the password itself.
   passwordHash String
   name         String
-  createdAt    DateTime @default(now())
+  /// Session cookies are stateless JWTs that live for 7 days, so changing the
+  /// password cannot invalidate them by itself. getSession() compares the
+  /// token's `iat` against this field to reject anything issued beforehand.
+  /// Truncated to whole seconds so a session created in the same second as the
+  /// change is not rejected by sub-second drift.
+  passwordChangedAt DateTime @default(now())
+  createdAt         DateTime  @default(now())
+
+  resetTokens PasswordResetToken[]
+}
+
+/// Single-use, short-lived credentials for the "olvidé mi contraseña" flow.
+///
+/// Only the SHA-256 of the token is stored. A leaked database dump then yields
+/// nothing usable: the plaintext exists only in the email and in the request
+/// that redeems it.
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  adminId   String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([expiresAt])
+}
+
+/// Contact form submissions, persisted before the notification email is sent.
+///
+/// The row is the source of truth: if Resend is down or the inbox filters the
+/// message, the lead is still recoverable here instead of being lost.
+model ContactMessage {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  /// SHA-256 of the submitter's IP. Hashed rather than stored raw so the table
+  /// does not become a list of visitor addresses.
+  ipHash    String?
+  /// Honeypot field: real users never see it, bots fill it in.
+  company   String?
+  createdAt DateTime  @default(now())
+
+  @@index([createdAt])
+}
+
+/// Generic request counter for the public endpoints that anyone can hit.
+///
+/// Rate limiting cannot live in process memory here: every serverless lambda is
+/// a separate, short-lived instance, so an in-memory Map resets on every cold
+/// start and is not shared between concurrent instances — it would throttle
+/// nothing. Counting rows in Postgres survives both.
+model RateLimitEvent {
+  id        String   @id @default(cuid())
+  /// SHA-256 of the subject (IP, or IP + email). Never the raw value.
+  key       String
+  createdAt DateTime @default(now())
+
+  @@index([key, createdAt])
 }
