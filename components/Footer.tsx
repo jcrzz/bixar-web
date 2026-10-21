@@ -69,7 +69,6 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col gap-4 border-t border-white/10 py-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Bixar. Todos los derechos reservados.</p>
-          <p>Ingeniería · Arquitectura · Construcción</p>
         </div>
       </div>
     </footer>

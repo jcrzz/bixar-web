@@ -21,12 +21,6 @@ export function Hero() {
 
       {/* Overlay gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#202020]/90 via-[#202020]/50 to-[#202020]/10" />
-
-      {/* Decorative element */}
-      <div className="absolute right-[12%] top-1/3 hidden h-56 w-56 border border-[#186DD4]/40 lg:block">
-        <div className="absolute -right-4 -top-4 h-full w-full border border-[#09C895]/30" />
-      </div>
-
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <SectionLabel>Ingeniería que transforma</SectionLabel>

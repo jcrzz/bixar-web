@@ -7,7 +7,7 @@ export function Logo() {
         className="logo-img"
       />
       <span className="logo-font text-sm font-semibold tracking-[0.2em] text-white">
-        BIXAR<span className="text-[#09C895]">.</span>
+        BIXAR
       </span>
     </div>
   )
