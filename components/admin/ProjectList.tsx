@@ -8,7 +8,7 @@ import type { ProjectCardData } from '@/components/admin/ProjectCard'
  */
 export async function ProjectList() {
   const projects = await prisma.project.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
     select: {
       id: true,
       name: true,

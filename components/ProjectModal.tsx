@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MapPin, X } from 'lucide-react'
 import type { Project } from '@/types'
 import { useEscapeKey } from '@/hooks/useEscapeKey'
 import { useLockBody } from '@/hooks/useLockBody'
@@ -134,9 +134,17 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           <div className="p-5 sm:p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="font-mono text-xs uppercase tracking-widest text-[#09C895]">
-                  {project.category}
-                </p>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <p className="font-mono text-xs uppercase tracking-widest text-[#09C895]">
+                    {project.category}
+                  </p>
+                  {project.location && (
+                    <p className="flex items-center gap-1 font-mono text-xs uppercase tracking-widest text-white/40">
+                      <MapPin size={12} aria-hidden />
+                      {project.location}
+                    </p>
+                  )}
+                </div>
                 <h3 className="mt-2 text-2xl">{project.name}</h3>
               </div>
               <span className="font-mono text-sm text-white/50">

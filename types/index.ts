@@ -1,6 +1,8 @@
 export interface Project {
   name: string
   category: string
+  /** Short free-text location; absent/empty means it isn't rendered. */
+  location?: string | null
   description: string
   cover: string
   images: string[]

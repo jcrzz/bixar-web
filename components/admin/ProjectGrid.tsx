@@ -2,13 +2,15 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { FolderKanban, Plus, Search, X } from 'lucide-react'
+import { FolderKanban, ListOrdered, LayoutGrid, Plus, Search, X } from 'lucide-react'
 
 import { ProjectCard, type ProjectCardData } from '@/components/admin/ProjectCard'
+import { ProjectOrderList } from '@/components/admin/ProjectOrderList'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 type Filter = 'all' | 'published' | 'drafts'
+type View = 'cards' | 'order'
 
 const FILTERS: { value: Filter; label: string }[] = [
   { value: 'all', label: 'Todos' },
@@ -16,9 +18,15 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: 'drafts', label: 'Borradores' },
 ]
 
+const VIEWS: { value: View; label: string; icon: typeof LayoutGrid }[] = [
+  { value: 'cards', label: 'Tarjetas', icon: LayoutGrid },
+  { value: 'order', label: 'Orden', icon: ListOrdered },
+]
+
 export function ProjectGrid({ projects }: { projects: ProjectCardData[] }) {
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
+  const [view, setView] = useState<View>('cards')
 
   const counts = useMemo(
     () => ({
@@ -48,57 +56,93 @@ export function ProjectGrid({ projects }: { projects: ProjectCardData[] }) {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative w-full sm:max-w-xs">
-          <Search
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
-          />
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar por título o categoría"
-            aria-label="Buscar proyectos"
-            className="w-full rounded-lg border border-input bg-muted py-2.5 pr-9 pl-10 text-sm text-foreground placeholder:text-muted-foreground/70 transition-colors outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/25"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery('')}
-              aria-label="Limpiar búsqueda"
-              className="absolute top-1/2 right-2.5 grid size-6 -translate-y-1/2 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            >
-              <X className="size-3.5" />
-            </button>
-          )}
-        </div>
+        {view === 'cards' ? (
+          <div className="relative w-full sm:max-w-xs">
+            <Search
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
+            />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar por título o categoría"
+              aria-label="Buscar proyectos"
+              className="w-full rounded-lg border border-input bg-muted py-2.5 pr-9 pl-10 text-sm text-foreground placeholder:text-muted-foreground/70 transition-colors outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/25"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                aria-label="Limpiar búsqueda"
+                className="absolute top-1/2 right-2.5 grid size-6 -translate-y-1/2 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Definí en qué orden se muestran los proyectos en la web.
+          </p>
+        )}
 
         <div className="flex items-center gap-3">
+          {view === 'cards' && (
+            <div
+              role="group"
+              aria-label="Filtrar por estado"
+              className="flex rounded-lg border border-border bg-muted p-0.5"
+            >
+              {FILTERS.map(({ value, label }) => {
+                const active = filter === value
+
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setFilter(value)}
+                    aria-pressed={active}
+                    className={cn(
+                      'rounded-md px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+                      active
+                        ? 'bg-card text-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground',
+                    )}
+                  >
+                    {label}
+                    <span className="ml-1.5 text-muted-foreground/70">
+                      {counts[value]}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
           <div
             role="group"
-            aria-label="Filtrar por estado"
+            aria-label="Cambiar vista"
             className="flex rounded-lg border border-border bg-muted p-0.5"
           >
-            {FILTERS.map(({ value, label }) => {
-              const active = filter === value
+            {VIEWS.map(({ value, label, icon: Icon }) => {
+              const active = view === value
 
               return (
                 <button
                   key={value}
                   type="button"
-                  onClick={() => setFilter(value)}
+                  onClick={() => setView(value)}
                   aria-pressed={active}
                   className={cn(
-                    'rounded-md px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+                    'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                     active
                       ? 'bg-card text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
+                  <Icon className="size-3.5" aria-hidden />
                   {label}
-                  <span className="ml-1.5 text-muted-foreground/70">
-                    {counts[value]}
-                  </span>
                 </button>
               )
             })}
@@ -106,7 +150,9 @@ export function ProjectGrid({ projects }: { projects: ProjectCardData[] }) {
         </div>
       </div>
 
-      {visible.length > 0 ? (
+      {view === 'order' ? (
+        <ProjectOrderList projects={projects} />
+      ) : visible.length > 0 ? (
         <>
           <p className="text-xs text-muted-foreground">
             {visible.length === projects.length

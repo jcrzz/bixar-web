@@ -17,13 +17,14 @@ export async function ProjectsSection() {
   try {
     const rows = await prisma.project.findMany({
       where: { published: true },
-      orderBy: { createdAt: 'asc' },
+      orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
       include: { images: { orderBy: { order: 'asc' } } },
     })
 
-    projects = rows.map(({ id, createdAt, updatedAt, published, ...row }) => ({
+    projects = rows.map(({ id, createdAt, updatedAt, published, order, ...row }) => ({
       name: row.name,
       category: row.category,
+      location: row.location,
       description: row.description,
       cover: row.cover,
       // The carousel and modal index into this array unguarded, so a project

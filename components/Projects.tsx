@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
 import type { Project } from '@/types'
 import { SectionLabel } from './SectionLabel'
 import { ProjectModal } from './ProjectModal'
@@ -155,9 +155,17 @@ export function Projects({ projects }: ProjectsProps) {
                         </span>
                       </div>
                       <div className="mt-5 border-t border-white/10 pt-4">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#09C895]">
-                          {item.category}
-                        </p>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#09C895]">
+                            {item.category}
+                          </p>
+                          {item.location && (
+                            <p className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                              <MapPin size={11} aria-hidden />
+                              {item.location}
+                            </p>
+                          )}
+                        </div>
                         <h3 className="mt-3 text-2xl font-medium">{item.name}</h3>
                       </div>
                     </button>

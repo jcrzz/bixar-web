@@ -14,6 +14,9 @@ export const projectSchema = z.object({
     .string({ error: 'La categoría es requerida' })
     .min(1, 'La categoría es requerida')
     .max(100),
+  /// Optional short text ("Paraná, Entre Ríos"). Empty means "no location";
+  /// the API stores it as null so the public card can skip rendering it.
+  location: z.string().max(120).optional().default(''),
   description: z
     .string({ error: 'La descripción es requerida' })
     .min(1, 'La descripción es requerida'),

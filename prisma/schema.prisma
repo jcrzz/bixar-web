@@ -12,9 +12,14 @@ model Project {
   id          String         @id @default(cuid())
   name        String
   category    String
+  /// Short free-text location shown on the public card/modal (optional).
+  location    String?
   description String
   cover       String
   published   Boolean        @default(true)
+  /// Position in the public carousel, managed by drag & drop in the admin
+  /// panel. Lower shows first. New projects append to the end.
+  order       Int            @default(0)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   images      ProjectImage[]

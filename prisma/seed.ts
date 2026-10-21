@@ -54,6 +54,9 @@ async function seedProjects() {
         description: project.description,
         cover: project.cover,
         published: true,
+        // Mirrors createdAt so the seeded order matches the order the public
+        // section had before the `order` column existed.
+        order: index,
         createdAt,
         images: {
           create: project.images.map((url, order) => ({ url, order })),

@@ -26,6 +26,7 @@ export default async function EditarProyectoPage({
       id: true,
       name: true,
       category: true,
+      location: true,
       description: true,
       cover: true,
       published: true,

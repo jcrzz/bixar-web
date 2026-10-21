@@ -38,6 +38,11 @@ export async function PUT(
 
     const { images, ...projectData } = data
 
+    // Same normalization as POST: the cover belongs to the gallery.
+    const imageUrls = images.includes(projectData.cover)
+      ? images
+      : [projectData.cover, ...images]
+
     // The gallery is replaced wholesale, so the previous rows are cleared
     // first. Both statements must be atomic: without the transaction, a failure
     // in the update (bad id, DB error) would leave the project with its
@@ -49,8 +54,12 @@ export async function PUT(
         where: { id },
         data: {
           ...projectData,
+          // Blank means "no location": stored as null, not as an empty string.
+          // `order` is untouched here — position is managed exclusively by
+          // PATCH /api/proyectos/orden.
+          location: projectData.location.trim() || null,
           images: {
-            create: images.map((url, index) => ({ url, order: index })),
+            create: imageUrls.map((url, index) => ({ url, order: index })),
           },
         },
         include: { images: true },

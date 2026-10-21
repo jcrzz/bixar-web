@@ -14,6 +14,7 @@ export type ProjectFormValues = {
   id: string
   name: string
   category: string
+  location: string | null
   description: string
   cover: string
   published: boolean
@@ -54,12 +55,38 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
   const router = useRouter()
   const { toast } = useToast()
 
+  // Older projects may have a cover that never went into the gallery; inject
+  // it (at the front) only then. When it's already in the list the gallery
+  // order must stay untouched — deduping `[cover, ...images]` would move it
+  // to position 0 and reshuffle the modal.
+  const initialImages = (() => {
+    if (!project) return []
+    const gallery = project.images.filter(Boolean)
+    return project.cover && !gallery.includes(project.cover)
+      ? [project.cover, ...gallery]
+      : gallery
+  })()
+
   const [name, setName] = useState(project?.name ?? '')
   const [category, setCategory] = useState(project?.category ?? '')
+  const [location, setLocation] = useState(project?.location ?? '')
   const [description, setDescription] = useState(project?.description ?? '')
   const [cover, setCover] = useState(project?.cover ?? '')
-  const [images, setImages] = useState<string[]>(project?.images ?? [])
+  const [images, setImages] = useState<string[]>(initialImages)
   const [published, setPublished] = useState(project?.published ?? true)
+
+  /**
+   * The gallery is the single image list, so it also drives the cover:
+   * - removing the image that was the cover reassigns the first survivor;
+   * - with no cover yet (new project), the first uploaded image becomes it.
+   * An empty list clears it and the validation below catches it.
+   */
+  function handleImagesChange(next: string[]) {
+    setImages(next)
+    if (!cover || !next.includes(cover)) {
+      setCover(next[0] ?? '')
+    }
+  }
 
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitting, setSubmitting] = useState(false)
@@ -74,7 +101,7 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
     if (!name.trim()) next.name = 'El título es requerido'
     if (!category.trim()) next.category = 'La categoría es requerida'
     if (!description.trim()) next.description = 'La descripción es requerida'
-    if (!cover) next.cover = 'Subí una imagen de portada'
+    if (!cover) next.cover = 'Elegí una imagen de portada'
 
     return next
   }
@@ -96,9 +123,10 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
 
     if (first === 'cover') {
       // The drop target is a div, so it can't take focus. Scrolling it into
-      // view plus the red border is enough to point at it.
+      // view plus the red border is enough to point at it. The cover lives
+      // inside the unified gallery, so that's the section to reveal.
       document
-        .getElementById('project-cover')
+        .getElementById('project-images')
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       return
     }
@@ -130,12 +158,17 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
 
     setSubmitting(true)
 
+    // The cover is always one of the gallery images; belt and braces in case
+    // state got out of sync (the server normalizes this too).
+    const imageUrls = cover && !images.includes(cover) ? [cover, ...images] : images
+
     const body = {
       name: name.trim(),
       category: category.trim(),
+      location: location.trim(),
       description: description.trim(),
       cover,
-      images,
+      images: imageUrls,
       published,
     }
 
@@ -230,6 +263,20 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
                 invalid={Boolean(errors.category)}
               />
             </Field>
+
+            <Field
+              label="Ubicación"
+              htmlFor="location"
+              hint="Opcional. Aparece en la tarjeta y en la ventana del proyecto."
+            >
+              <Input
+                id="location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Paraná, Entre Ríos"
+                maxLength={120}
+              />
+            </Field>
           </div>
 
           <Field
@@ -287,24 +334,19 @@ export function ProjectForm({ mode, project, onCancel }: ProjectFormProps) {
 
         <Section
           title="Imágenes"
-          description="La portada es la que se usa en las tarjetas. La galería se abre al hacer clic en el proyecto."
+          description="La portada es la que se usa en las tarjetas. Marcá cuál es con el ícono de estrella y abrila con un clic en la web."
         >
           <ImageDropzone
-            id="project-cover"
-            label="Imagen de portada"
+            id="project-images"
+            label="Imágenes del proyecto"
             required
-            value={cover ? [cover] : []}
-            onChange={(urls) => setCover(urls[0] ?? '')}
-            error={errors.cover}
-            hint="Obligatoria. Se usa en las tarjetas del sitio."
-          />
-
-          <ImageDropzone
-            label="Galería"
             multiple
             value={images}
-            onChange={setImages}
-            hint="La primera imagen es la que se muestra en la galería al abrir el proyecto."
+            onChange={handleImagesChange}
+            coverUrl={cover}
+            onCoverChange={setCover}
+            error={errors.cover}
+            hint="Subí todas las que quieras. La marcada como portada es la que se usa en las tarjetas del sitio; la primera de la lista abre la galería."
           />
         </Section>
       </div>

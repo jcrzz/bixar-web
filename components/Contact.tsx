@@ -62,7 +62,7 @@ export function Contact() {
         {/* Left: Info */}
         <div>
           <SectionLabel>Contacto</SectionLabel>
-          <h2 className="text-5xl font-semibold leading-tight tracking-[-0.05em] sm:text-7xl">
+          <h2 className="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-6xl">
             Evaluemos
             <br />
             <span className="text-[#186DD4]">tu proyecto.</span>

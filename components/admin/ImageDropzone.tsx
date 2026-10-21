@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { CircleAlert, ImagePlus, LoaderCircle, Upload, X } from 'lucide-react'
+import { CircleAlert, ImagePlus, LoaderCircle, Star, Upload, X } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import {
@@ -21,6 +21,13 @@ type ImageDropzoneProps = {
   /** Remote URLs already stored for this field. */
   value: string[]
   onChange: (urls: string[]) => void
+  /**
+   * Gallery mode only: which of `value` is the cover. Renders the "portada"
+   * badge on it and the pick button on the others.
+   */
+  coverUrl?: string
+  /** Gallery mode only: fired when the user taps the cover button on a thumb. */
+  onCoverChange?: (url: string) => void
   error?: string
   className?: string
 }
@@ -47,6 +54,8 @@ export function ImageDropzone({
   multiple = false,
   value,
   onChange,
+  coverUrl,
+  onCoverChange,
   error,
   className,
 }: ImageDropzoneProps) {
@@ -133,7 +142,7 @@ export function ImageDropzone({
 
   const empty = value.length === 0 && !pendingPreview
 
-  // The form's own error ("Subí una imagen de portada") wins over a leftover
+  // The form's own error ("Elegí una imagen de portada") wins over a leftover
   // upload error: the missing value is the thing the user has to act on.
   const visibleError = error || localError
   const hasError = Boolean(visibleError)
@@ -161,41 +170,65 @@ export function ImageDropzone({
             multiple ? 'grid-cols-3 sm:grid-cols-4' : 'grid-cols-1',
           )}
         >
-          {value.map((url, index) => (
-            <li
-              key={`${url}-${index}`}
-              className={cn(
-                'group relative overflow-hidden rounded-lg border border-border bg-muted',
-                !multiple && 'aspect-[4/3]',
-              )}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={url}
-                alt=""
+          {value.map((url, index) => {
+            const isCover = multiple && Boolean(coverUrl) && url === coverUrl
+
+            return (
+              <li
+                key={`${url}-${index}`}
                 className={cn(
-                  'size-full object-cover',
-                  !multiple && 'absolute inset-0',
+                  'group relative overflow-hidden rounded-lg border bg-muted',
+                  isCover ? 'border-primary' : 'border-border',
+                  !multiple && 'aspect-[4/3]',
                 )}
-              />
-
-              {!multiple && (
-                <span className="absolute top-2 left-2 rounded-md bg-background/75 px-2 py-1 text-[0.7rem] font-medium text-foreground backdrop-blur-sm">
-                  Portada
-                </span>
-              )}
-
-              {/* Always visible on touch, revealed on hover for pointer devices. */}
-              <button
-                type="button"
-                onClick={() => removeAt(index)}
-                aria-label="Quitar imagen"
-                className="absolute top-2 right-2 grid size-7 place-items-center rounded-md bg-background/75 text-foreground opacity-100 backdrop-blur-sm transition hover:bg-destructive hover:text-destructive-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"
               >
-                <X className="size-3.5" />
-              </button>
-            </li>
-          ))}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={url}
+                  alt=""
+                  className={cn(
+                    'size-full object-cover',
+                    !multiple && 'absolute inset-0',
+                  )}
+                />
+
+                {!multiple && (
+                  <span className="absolute top-2 left-2 rounded-md bg-background/75 px-2 py-1 text-[0.7rem] font-medium text-foreground backdrop-blur-sm">
+                    Portada
+                  </span>
+                )}
+
+                {/* Gallery mode: pick this one as the cover. */}
+                {multiple && onCoverChange && !isCover && (
+                  <button
+                    type="button"
+                    onClick={() => onCoverChange(url)}
+                    aria-label="Hacer portada"
+                    title="Hacer portada"
+                    className="absolute top-2 left-2 grid size-7 place-items-center rounded-md bg-background/75 text-foreground opacity-100 backdrop-blur-sm transition hover:bg-primary hover:text-primary-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"
+                  >
+                    <Star className="size-3.5" />
+                  </button>
+                )}
+
+                {multiple && isCover && (
+                  <span className="absolute top-2 left-2 rounded-md bg-primary px-2 py-1 text-[0.7rem] font-medium text-primary-foreground backdrop-blur-sm">
+                    Portada
+                  </span>
+                )}
+
+                {/* Always visible on touch, revealed on hover for pointer devices. */}
+                <button
+                  type="button"
+                  onClick={() => removeAt(index)}
+                  aria-label="Quitar imagen"
+                  className="absolute top-2 right-2 grid size-7 place-items-center rounded-md bg-background/75 text-foreground opacity-100 backdrop-blur-sm transition hover:bg-destructive hover:text-destructive-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </li>
+            )
+          })}
         </ul>
       )}
 
